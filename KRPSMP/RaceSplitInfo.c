@@ -8,7 +8,7 @@ int initRaceSplitInfo(FILE* logFile) {
 	raceSplitInfoFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(RaceSplitInfo_t), "Local\\KRPSMP_RaceSplitInfo");
 
 	if (raceSplitInfoFile)
-		raceSplitInfoFile = (RaceSplitInfo_t*)MapViewOfFile(raceSplitInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceSplitInfo_t));
+		raceSplitInfoView = (RaceSplitInfo_t*)MapViewOfFile(raceSplitInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceSplitInfo_t));
 
 	if (!raceSplitInfoFile || !raceSplitInfoView)
 		return -1;

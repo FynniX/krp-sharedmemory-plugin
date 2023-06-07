@@ -8,7 +8,7 @@ int initRaceTrackPositionInfo(FILE* logFile) {
 	raceTrackPositionInfoFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(RaceTrackPositionInfo_t), "Local\\KRPSMP_RaceTrackPositionInfo");
 
 	if (raceTrackPositionInfoFile)
-		raceTrackPositionInfoFile = (RaceTrackPositionInfo_t*)MapViewOfFile(raceTrackPositionInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceTrackPositionInfo_t));
+		raceTrackPositionInfoView = (RaceTrackPositionInfo_t*)MapViewOfFile(raceTrackPositionInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceTrackPositionInfo_t));
 
 	if (!raceTrackPositionInfoFile || !raceTrackPositionInfoView)
 		return -1;

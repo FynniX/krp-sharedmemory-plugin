@@ -8,7 +8,7 @@ int initRaceRemoveEntryInfo(FILE* logFile) {
 	raceRemoveEntryInfoFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(RaceRemoveEntryInfo_t), "Local\\KRPSMP_RaceRemoveEntryInfo");
 
 	if (raceRemoveEntryInfoFile)
-		raceRemoveEntryInfoFile = (RaceRemoveEntryInfo_t*)MapViewOfFile(raceRemoveEntryInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceRemoveEntryInfo_t));
+		raceRemoveEntryInfoView = (RaceRemoveEntryInfo_t*)MapViewOfFile(raceRemoveEntryInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceRemoveEntryInfo_t));
 
 	if (!raceRemoveEntryInfoFile || !raceRemoveEntryInfoView)
 		return -1;

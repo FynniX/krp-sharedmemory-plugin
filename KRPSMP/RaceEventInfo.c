@@ -8,7 +8,7 @@ int initRaceEventInfo(FILE* logFile) {
 	raceEventInfoFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(RaceEventInfo_t), "Local\\KRPSMP_RaceEventInfo");
 
 	if (raceEventInfoFile)
-		raceEventInfoFile = (RaceEventInfo_t*)MapViewOfFile(raceEventInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceEventInfo_t));
+		raceEventInfoView = (RaceEventInfo_t*)MapViewOfFile(raceEventInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(RaceEventInfo_t));
 
 	if (!raceEventInfoFile || !raceEventInfoView)
 		return -1;
