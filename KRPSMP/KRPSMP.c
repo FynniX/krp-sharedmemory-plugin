@@ -10,6 +10,7 @@
 #include "KartLapInfo.h"
 #include "KartSplitInfo.h"
 #include "KartTelemetryInfo.h"
+#include "TrackSegmentInfo.h"
 #include "RaceEventInfo.h"
 #include "RaceAddEntryInfo.h"
 #include "RaceRemoveEntryInfo.h"
@@ -42,6 +43,7 @@ int Startup(char* _szSavePath) {
 	if (!logFile) return -1;
 
 	fprintf(logFile, "KRPSMP: Startup\n");
+	fprintf(logFile, "%d\n", sizeof(RaceVehicleDataInfo_t));
 
 	Configuration_t config = getConfiguration();
 	if (config.enable == 0 || config.rate == -1) return -1;
@@ -52,6 +54,8 @@ int Startup(char* _szSavePath) {
 	if (initKartLapInfo(logFile) == -1) return -1;
 	if (initKartSplitInfo(logFile) == -1) return -1;
 	if (initKartTelemetryInfo(logFile) == -1) return -1;
+
+	if (initTrackSegmentInfo(logFile) == -1) return -1;
 
 	if (initRaceEventInfo(logFile) == -1) return -1;
 	if (initRaceAddEntryInfo(logFile) == -1) return -1;
@@ -91,6 +95,8 @@ void Shutdown() {
 	deinitKartSplitInfo(logFile);
 	deinitKartTelemetryInfo(logFile);
 
+	deinitTrackSegmentInfo(logFile);
+
 	deinitRaceEventInfo(logFile);
 	deinitRaceAddEntryInfo(logFile);
 	deinitRaceRemoveEntryInfo(logFile);
@@ -109,19 +115,19 @@ void Shutdown() {
 
 /* called when event is initialized. This function is optional */
 void EventInit(void* _pData, int _iDataSize) {
-	kartEventInfoView->m_KartEvent = (SPluginsKartEvent_t*)_pData;
+	kartEventInfoView->m_KartEvent = *((SPluginsKartEvent_t*)_pData);
 	updateKartEventInfo(logFile);
 }
 
 /* called when event is closed. This function is optional */
 void EventDeinit() {
-	memset(kartEventInfoView->m_KartEvent, 0, sizeof(SPluginsKartEvent_t));
+	kartEventInfoView->m_KartEvent = *((SPluginsKartEvent_t*) 0);
 	updateKartEventInfo(logFile);
 }
 
 /* called when kart goes to track. This function is optional */
 void RunInit(void* _pData, int _iDataSize) {
-	kartSessionInfoView->m_KartSession = (SPluginsKartSession_t*)_pData;
+	kartSessionInfoView->m_KartSession = *((SPluginsKartSession_t*)_pData);
 	updateKartSessionInfo(logFile);
 }
 
@@ -129,8 +135,7 @@ void RunInit(void* _pData, int _iDataSize) {
 void RunDeinit() {
 	pluginInfoView->m_iState = 0;
 	updatePluginInfo(logFile);
-
-	memset(kartSessionInfoView->m_KartSession, 0, sizeof(SPluginsKartSession_t));
+	kartSessionInfoView->m_KartSession = *((SPluginsKartSession_t*)0);
 	updateKartSessionInfo(logFile);
 }
 
@@ -142,13 +147,13 @@ void RunStop() {
 
 /* called when a new lap is recorded. This function is optional */
 void RunLap(void* _pData, int _iDataSize) {
-	kartLapInfoView->m_KartLap = (SPluginsKartLap_t*)_pData;
+	kartLapInfoView->m_KartLap = *((SPluginsKartLap_t*)_pData);
 	updateKartLapInfo(logFile);
 }
 
 /* called when a split is crossed. This function is optional */
 void RunSplit(void* _pData, int _iDataSize) {
-	kartSplitInfoView->m_KartSplit = (SPluginsKartSplit_t*)_pData;
+	kartSplitInfoView->m_KartSplit = *((SPluginsKartSplit_t*)_pData);
 	updateKartSplitInfo(logFile);
 }
 
@@ -159,67 +164,83 @@ void RunTelemetry(void* _pData, int _iDataSize, float _fTime, float _fPos) {
 
 	kartTelemetryInfoView->_fTime = _fTime;
 	kartTelemetryInfoView->_fPos = _fPos;
-	kartTelemetryInfoView->m_KartData = (SPluginsKartData_t*)_pData;
+	kartTelemetryInfoView->m_KartData = *((SPluginsKartData_t*)_pData);
 	updateKartTelemetryInfo(logFile);
+}
+
+/*
+_pfRaceData is a pointer to a float array with the longitudinal position of the start / finish line, splits and speedtrap.
+This function is optional
+*/
+void TrackCenterline(int _iNumSegments, SPluginsTrackSegment_t* _pasSegment, float* _pfRaceData) {
+	trackSegmentInfoView->_iNumSegments = _iNumSegments;
+
+	for (int i = 0; i < _iNumSegments; i++)
+		trackSegmentInfoView->m_TrackSegments[i] = *(_pasSegment + i);
+
+	for (int i = 0; i < 4; i++)
+		trackSegmentInfoView->m_RaceData[i] = *(_pfRaceData + i);
+
+	updateTrackSegmentInfo(logFile);
 }
 
 /* called when event is initialized or a replay is loaded. This function is optional */
 void RaceEvent(void* _pData, int _iDataSize) {
-	raceEventInfoView->m_RaceEvent = (SPluginsRaceEvent_t*)_pData;
+	raceEventInfoView->m_RaceEvent = *((SPluginsRaceEvent_t*)_pData);
 	updateRaceEventInfo(logFile);
 }
 
 /* called when event is closed. This function is optional */
 void RaceDeinit() {
-	memset(raceEventInfoView->m_RaceEvent, 0, sizeof(SPluginsRaceEvent_t));
+	raceEventInfoView->m_RaceEvent = *((SPluginsRaceEvent_t*)0);
 	updateRaceEventInfo(logFile);
 }
 
 /* This function is optional */
 void RaceAddEntry(void* _pData, int _iDataSize) {
-	raceAddEntryInfoView->m_RaceAddEntry = (SPluginsRaceAddEntry_t*)_pData;
+	raceAddEntryInfoView->m_RaceAddEntry = *((SPluginsRaceAddEntry_t*)_pData);
 	updateRaceAddEntryInfo(logFile);
 }
 
 /* This function is optional */
 void RaceRemoveEntry(void* _pData, int _iDataSize) {
-	raceRemoveEntryInfoView->m_RaceRemoveEntry = (SPluginsRaceRemoveEntry_t*)_pData;
+	raceRemoveEntryInfoView->m_RaceRemoveEntry = *((SPluginsRaceRemoveEntry_t*)_pData);
 	updateRaceRemoveEntryInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSession(void* _pData, int _iDataSize) {
-	raceSessionInfoView->m_RaceSession = (SPluginsRaceSession_t*)_pData;
+	raceSessionInfoView->m_RaceSession = *((SPluginsRaceSession_t*)_pData);
 	updateRaceSessionInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSessionState(void* _pData, int _iDataSize) {
-	raceSessionStateInfoView->m_RaceSessionState = (SPluginsRaceSessionState_t*)_pData;
+	raceSessionStateInfoView->m_RaceSessionState = *((SPluginsRaceSessionState_t*)_pData);
 	updateRaceSessionStateInfo(logFile);
 }
 
 /* This function is optional */
 void RaceLap(void* _pData, int _iDataSize) {
-	raceLapInfoView->m_RaceLap = (SPluginsRaceLap_t*)_pData;
+	raceLapInfoView->m_RaceLap = *((SPluginsRaceLap_t*)_pData);
 	updateRaceLapInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSplit(void* _pData, int _iDataSize) {
-	raceSplitInfoView->m_RaceSplit = (SPluginsRaceSplit_t*)_pData;
+	raceSplitInfoView->m_RaceSplit = *((SPluginsRaceSplit_t*)_pData);
 	updateRaceSplitInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSpeed(void* _pData, int _iDataSize) {
-	raceSpeedInfoView->m_RaceSpeed = (SPluginsRaceSpeed_t*)_pData;
+	raceSpeedInfoView->m_RaceSpeed = *((SPluginsRaceSpeed_t*)_pData);
 	updateRaceSpeedInfo(logFile);
 }
 
 /* This function is optional */
 void RaceCommunication(void* _pData, int _iDataSize) {
-	raceCommunicationInfoView->m_RaceCommunication = (SPluginsRaceCommunication_t*)_pData;
+	raceCommunicationInfoView->m_RaceCommunication = *((SPluginsRaceCommunication_t*)_pData);
 	updateRaceCommunicationInfo(logFile);
 }
 
@@ -231,7 +252,10 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 	psRaceClassification = (SPluginsRaceClassification_t*)_pData;
 	pasRaceClassificationEntry = (SPluginsRaceClassificationEntry_t*)_pArray;
 
-	//TODO
+	raceClassificationInfoView->m_RaceClassification = *(psRaceClassification);
+	for (int i = 0; i < psRaceClassification->m_iNumEntries; i++)
+		raceClassificationInfoView->m_RaceEntries[i] = *(pasRaceClassificationEntry + i);
+
 	updateRaceClassificationInfo(logFile);
 }
 
@@ -241,12 +265,15 @@ void RaceTrackPosition(int _iNumVehicles, void* _pArray, int _iElemSize) {
 
 	pasRaceTrackPosition = (SPluginsRaceTrackPosition_t*)_pArray;
 
-	//TODO
+	raceTrackPositionInfoView->_iNumVehicles = _iNumVehicles;
+	for (int i = 0; i < _iNumVehicles; i++)
+		raceTrackPositionInfoView->m_RaceTrackPositions[i] = *(pasRaceTrackPosition + i);
+
 	updateRaceTrackPositionInfo(logFile);
 }
 
 /* This function is optional */
 void RaceVehicleData(void* _pData, int _iDataSize) {
-	raceVehicleDataInfoView->m_RaceVehicleData = (SPluginsRaceVehicleData_t*)_pData;
+	raceVehicleDataInfoView->m_RaceVehicleData = *((SPluginsRaceVehicleData_t*)_pData);
 	updateRaceVehicleDataInfo(logFile);
 }

@@ -75,6 +75,9 @@
     <ClCompile Include="RaceVehicleDataInfo.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="TrackSegmentInfo.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharedFileIn.h">
@@ -141,6 +144,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="RaceVehicleDataInfo.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackSegmentInfo.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

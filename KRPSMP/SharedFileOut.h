@@ -16,87 +16,100 @@ typedef struct {
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsKartEvent_t* m_KartEvent;
+	SPluginsKartEvent_t m_KartEvent;
 } KartEventInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsKartSession_t* m_KartSession;
+	SPluginsKartSession_t m_KartSession;
 } KartSessionInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsKartLap_t* m_KartLap;
+	SPluginsKartLap_t m_KartLap;
 } KartLapInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsKartSplit_t* m_KartSplit;
+	SPluginsKartSplit_t m_KartSplit;
 } KartSplitInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
 	float _fTime;
 	float _fPos;
-	SPluginsKartData_t* m_KartData;
+	SPluginsKartData_t m_KartData;
 } KartTelemetryInfo_t;
+
+//Track Centerline
+
+typedef struct {
+	int m_id;    													/* message id */
+	int _iNumSegments;
+	SPluginsTrackSegment_t m_TrackSegments[200];
+	float m_RaceData[4];
+} TrackSegmentInfo_t;
 
 // Race Events
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceEvent_t* m_RaceEvent;
+	SPluginsRaceEvent_t m_RaceEvent;
 } RaceEventInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceAddEntry_t* m_RaceAddEntry;
+	SPluginsRaceAddEntry_t m_RaceAddEntry;
 } RaceAddEntryInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceRemoveEntry_t* m_RaceRemoveEntry;
+	SPluginsRaceRemoveEntry_t m_RaceRemoveEntry;
 } RaceRemoveEntryInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSession_t* m_RaceSession;
+	SPluginsRaceSession_t m_RaceSession;
 } RaceSessionInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSessionState_t* m_RaceSessionState;
+	SPluginsRaceSessionState_t m_RaceSessionState;
 } RaceSessionStateInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceLap_t* m_RaceLap;
+	SPluginsRaceLap_t m_RaceLap;
 } RaceLapInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSplit_t* m_RaceSplit;
+	SPluginsRaceSplit_t m_RaceSplit;
 } RaceSplitInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSpeed_t* m_RaceSpeed;
+	SPluginsRaceSpeed_t m_RaceSpeed;
 } RaceSpeedInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceCommunication_t* m_RaceCommunication;
+	SPluginsRaceCommunication_t m_RaceCommunication;
 } RaceCommunicationInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
+	SPluginsRaceClassification_t m_RaceClassification;
+	SPluginsRaceClassificationEntry_t m_RaceEntries[100];
 } RaceClassificationInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
+	int _iNumVehicles;
+	SPluginsRaceTrackPosition_t m_RaceTrackPositions[100];
 } RaceTrackPositionInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceVehicleData_t* m_RaceVehicleData;
+	SPluginsRaceVehicleData_t m_RaceVehicleData;
 } RaceVehicleDataInfo_t;

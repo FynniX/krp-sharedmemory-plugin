@@ -159,6 +159,7 @@
     <ClCompile Include="RaceSplitInfo.c" />
     <ClCompile Include="RaceTrackPositionInfo.c" />
     <ClCompile Include="RaceVehicleDataInfo.c" />
+    <ClCompile Include="TrackSegmentInfo.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Configuration.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="RaceVehicleDataInfo.h" />
     <ClInclude Include="SharedFileIn.h" />
     <ClInclude Include="SharedFileOut.h" />
+    <ClInclude Include="TrackSegmentInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

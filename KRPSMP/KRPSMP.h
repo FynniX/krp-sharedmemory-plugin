@@ -23,6 +23,8 @@ KRPSMP_API void RunLap(void* _pData, int _iDataSize);
 KRPSMP_API void RunSplit(void* _pData, int _iDataSize);
 KRPSMP_API void RunTelemetry(void* _pData, int _iDataSize, float _fTime, float _fPos);
 
+KRPSMP_API void TrackCenterline(int _iNumSegments, SPluginsTrackSegment_t* _pasSegment, float* _pfRaceData);
+
 KRPSMP_API void RaceEvent(void* _pData, int _iDataSize);
 KRPSMP_API void RaceDeinit();
 KRPSMP_API void RaceAddEntry(void* _pData, int _iDataSize);
