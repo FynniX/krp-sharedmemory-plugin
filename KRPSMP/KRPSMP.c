@@ -43,7 +43,6 @@ int Startup(char* _szSavePath) {
 	if (!logFile) return -1;
 
 	fprintf(logFile, "KRPSMP: Startup\n");
-	fprintf(logFile, "%d\n", sizeof(RaceVehicleDataInfo_t));
 
 	Configuration_t config = getConfiguration();
 	if (config.enable == 0 || config.rate == -1) return -1;
@@ -177,9 +176,15 @@ This function is optional
 void TrackCenterline(int _iNumSegments, SPluginsTrackSegment_t* _pasSegment, float* _pfRaceData) {
 	trackSegmentInfoView->_iNumSegments = _iNumSegments;
 
-	for (int i = 0; i < _iNumSegments; i++)
-		trackSegmentInfoView->m_TrackSegments[i] = *(_pasSegment + i);
-
+	for (int i = 0; i < 200; i++) {
+		if (i < _iNumSegments) {
+			trackSegmentInfoView->m_TrackSegments[i] = *(_pasSegment + i);
+		} else {
+			SPluginsTrackSegment_t data = { 0 };
+			trackSegmentInfoView->m_TrackSegments[i] = data;
+		}
+	}
+		
 	for (int i = 0; i < 4; i++)
 		trackSegmentInfoView->m_RaceData[i] = *(_pfRaceData + i);
 
