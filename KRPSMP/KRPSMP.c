@@ -121,7 +121,8 @@ void EventInit(void* _pData, int _iDataSize) {
 
 /* called when event is closed. This function is optional */
 void EventDeinit() {
-	kartEventInfoView->m_KartEvent = *((SPluginsKartEvent_t*) 0);
+	SPluginsKartEvent_t data = { 0 };
+	kartEventInfoView->m_KartEvent = data;
 	updateKartEventInfo(logFile);
 }
 
@@ -135,7 +136,8 @@ void RunInit(void* _pData, int _iDataSize) {
 void RunDeinit() {
 	pluginInfoView->m_iState = 0;
 	updatePluginInfo(logFile);
-	kartSessionInfoView->m_KartSession = *((SPluginsKartSession_t*)0);
+	SPluginsKartSession_t data = { 0 };
+	kartSessionInfoView->m_KartSession = data;
 	updateKartSessionInfo(logFile);
 }
 
@@ -192,7 +194,8 @@ void RaceEvent(void* _pData, int _iDataSize) {
 
 /* called when event is closed. This function is optional */
 void RaceDeinit() {
-	raceEventInfoView->m_RaceEvent = *((SPluginsRaceEvent_t*)0);
+	SPluginsRaceEvent_t data = { 0 };
+	raceEventInfoView->m_RaceEvent = data;
 	updateRaceEventInfo(logFile);
 }
 
@@ -253,8 +256,15 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 	pasRaceClassificationEntry = (SPluginsRaceClassificationEntry_t*)_pArray;
 
 	raceClassificationInfoView->m_RaceClassification = *(psRaceClassification);
-	for (int i = 0; i < psRaceClassification->m_iNumEntries; i++)
-		raceClassificationInfoView->m_RaceEntries[i] = *(pasRaceClassificationEntry + i);
+	for (int i = 0; i < 100; i++) {
+		if (i < psRaceClassification->m_iNumEntries) {
+			raceClassificationInfoView->m_RaceEntries[i] = *(pasRaceClassificationEntry + i);
+		}
+		else {
+			SPluginsRaceClassificationEntry_t data = { 0 };
+			raceClassificationInfoView->m_RaceEntries[i] = data;
+		}
+	}
 
 	updateRaceClassificationInfo(logFile);
 }
@@ -266,8 +276,16 @@ void RaceTrackPosition(int _iNumVehicles, void* _pArray, int _iElemSize) {
 	pasRaceTrackPosition = (SPluginsRaceTrackPosition_t*)_pArray;
 
 	raceTrackPositionInfoView->_iNumVehicles = _iNumVehicles;
-	for (int i = 0; i < _iNumVehicles; i++)
-		raceTrackPositionInfoView->m_RaceTrackPositions[i] = *(pasRaceTrackPosition + i);
+	for (int i = 0; i < 100; i++) {
+		if (i < _iNumVehicles) {
+			raceTrackPositionInfoView->m_RaceTrackPositions[i] = *(pasRaceTrackPosition + i);
+		}
+		else {
+			SPluginsRaceTrackPosition_t data = { 0 };
+			raceTrackPositionInfoView->m_RaceTrackPositions[i] = data;
+		}
+	}
+		
 
 	updateRaceTrackPositionInfo(logFile);
 }
