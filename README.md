@@ -13,6 +13,10 @@
 1. Place **KRPSMP.dlo** into plugins folder inside [Kart Racing Pro](https://www.kartracing-pro.com/) installation folder.
 2. Place **krpsmp.ini** inside [Kart Racing Pro](https://www.kartracing-pro.com/) installation folder.
 
+## Developing
+
+- Change path inside **install.bat** to make it working with your environment.
+
 ## License
 
 Released under the [MIT License](https://github.com/FynniX/krp-sharedmemory-plugin/blob/main/LICENSE).
