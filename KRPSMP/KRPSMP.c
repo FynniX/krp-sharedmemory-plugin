@@ -72,7 +72,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 1;
+	pluginInfoView->m_PluginVersion = 2;
 	updatePluginInfo(logFile);
 
 	/*
