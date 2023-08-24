@@ -8,7 +8,7 @@ int initTrackSegmentInfo(FILE* logFile) {
 	trackSegmentInfoFile = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(TrackSegmentInfo_t), "Local\\KRPSMP_TrackSegmentInfo");
 
 	if (trackSegmentInfoFile)
-		trackSegmentInfoView = (RaceAddEntryInfo_t*)MapViewOfFile(trackSegmentInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(TrackSegmentInfo_t));
+		trackSegmentInfoView = (TrackSegmentInfo_t*)MapViewOfFile(trackSegmentInfoFile, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(TrackSegmentInfo_t));
 
 	if (!trackSegmentInfoFile || !trackSegmentInfoView)
 		return -1;

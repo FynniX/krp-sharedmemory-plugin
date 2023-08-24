@@ -59,6 +59,12 @@ typedef struct {
 
 typedef struct {
 	int m_id;    													/* message id */
+	int _iNumEntries;
+	SPluginsRaceAddEntry_t m_RaceEntries[100];
+} RaceEntriesInfo_t;
+
+typedef struct {
+	int m_id;    													/* message id */
 	SPluginsRaceAddEntry_t m_RaceAddEntry;
 } RaceAddEntryInfo_t;
 

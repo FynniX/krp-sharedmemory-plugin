@@ -1,1 +1,1 @@
-copy "C:\Users\Fynn Haupt\source\repos\KRPSMP\x64\Debug\KRPSMP.dll" "F:\SteamLibrary\steamapps\common\Kart Racing Pro\plugins\KRPSMP.dlo"
+copy "C:\Users\Fynn Haupt\source\repos\KRPSMP\x64\Debug\KRPSMP.dll" "G:\SteamLibrary\steamapps\common\Kart Racing Pro\plugins\KRPSMP.dlo"

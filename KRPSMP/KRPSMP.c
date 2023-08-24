@@ -12,6 +12,7 @@
 #include "KartTelemetryInfo.h"
 #include "TrackSegmentInfo.h"
 #include "RaceEventInfo.h"
+#include "RaceEntriesInfo.h"
 #include "RaceAddEntryInfo.h"
 #include "RaceRemoveEntryInfo.h"
 #include "RaceSessionInfo.h"
@@ -57,6 +58,7 @@ int Startup(char* _szSavePath) {
 	if (initTrackSegmentInfo(logFile) == -1) return -1;
 
 	if (initRaceEventInfo(logFile) == -1) return -1;
+	if (initRaceEntriesInfo(logFile) == -1) return -1;
 	if (initRaceAddEntryInfo(logFile) == -1) return -1;
 	if (initRaceRemoveEntryInfo(logFile) == -1) return -1;
 	if (initRaceSessionInfo(logFile) == -1) return -1;
@@ -84,6 +86,12 @@ int Startup(char* _szSavePath) {
 void Shutdown() {
 	fprintf(logFile, "KRPSMP: Shutdown\n");
 
+	SPluginsRaceAddEntry_t emptyEntry = { 0 };
+	for (int i = 0; i < 100; i++)
+		raceEntriesInfoView->m_RaceEntries[i] = emptyEntry;
+	raceEntriesInfoView->_iNumEntries = 0;
+	updateRaceEntriesInfo(logFile);
+
 	pluginInfoView->m_iState = -1;
 	updatePluginInfo(logFile);
 
@@ -97,6 +105,7 @@ void Shutdown() {
 	deinitTrackSegmentInfo(logFile);
 
 	deinitRaceEventInfo(logFile);
+	deinitRaceEntriesInfo(logFile);
 	deinitRaceAddEntryInfo(logFile);
 	deinitRaceRemoveEntryInfo(logFile);
 	deinitRaceSessionInfo(logFile);
@@ -123,6 +132,12 @@ void EventDeinit() {
 	SPluginsKartEvent_t data = { 0 };
 	kartEventInfoView->m_KartEvent = data;
 	updateKartEventInfo(logFile);
+
+	SPluginsRaceAddEntry_t emptyEntry = { 0 };
+	for (int i = 0; i < 100; i++)
+		raceEntriesInfoView->m_RaceEntries[i] = emptyEntry;
+	raceEntriesInfoView->_iNumEntries = 0;
+	updateRaceEntriesInfo(logFile);
 }
 
 /* called when kart goes to track. This function is optional */
@@ -135,6 +150,7 @@ void RunInit(void* _pData, int _iDataSize) {
 void RunDeinit() {
 	pluginInfoView->m_iState = 0;
 	updatePluginInfo(logFile);
+
 	SPluginsKartSession_t data = { 0 };
 	kartSessionInfoView->m_KartSession = data;
 	updateKartSessionInfo(logFile);
@@ -207,13 +223,46 @@ void RaceDeinit() {
 /* This function is optional */
 void RaceAddEntry(void* _pData, int _iDataSize) {
 	raceAddEntryInfoView->m_RaceAddEntry = *((SPluginsRaceAddEntry_t*)_pData);
+
+	int nextIndex = raceEntriesInfoView->_iNumEntries;
+	int newRaceNum = raceAddEntryInfoView->m_RaceAddEntry.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (newRaceNum != currentRaceNum) continue;
+		nextIndex = i;
+		break;
+	}
+
+	raceEntriesInfoView->m_RaceEntries[nextIndex] = raceAddEntryInfoView->m_RaceAddEntry;
+	if (nextIndex == raceEntriesInfoView->_iNumEntries) raceEntriesInfoView->_iNumEntries++;
+
 	updateRaceAddEntryInfo(logFile);
+	updateRaceEntriesInfo(logFile);
 }
 
 /* This function is optional */
 void RaceRemoveEntry(void* _pData, int _iDataSize) {
 	raceRemoveEntryInfoView->m_RaceRemoveEntry = *((SPluginsRaceRemoveEntry_t*)_pData);
+
+	int index = -1;
+	int removeRaceNum = raceRemoveEntryInfoView->m_RaceRemoveEntry.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (removeRaceNum != currentRaceNum) continue;
+		index = i;
+		break;
+	}
+
+	if (index != -1) {
+		for (int i = index; i < 99; i++)
+			raceEntriesInfoView->m_RaceEntries[i] = raceEntriesInfoView->m_RaceEntries[i + 1];
+		SPluginsRaceAddEntry_t emptyEntry = { 0 };
+		raceEntriesInfoView->m_RaceEntries[99] = emptyEntry;
+		raceEntriesInfoView->_iNumEntries--;
+	}
+
 	updateRaceRemoveEntryInfo(logFile);
+	updateRaceEntriesInfo(logFile);
 }
 
 /* This function is optional */

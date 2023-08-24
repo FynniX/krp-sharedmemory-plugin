@@ -150,6 +150,7 @@
     <ClCompile Include="RaceAddEntryInfo.c" />
     <ClCompile Include="RaceClassificationInfo.c" />
     <ClCompile Include="RaceCommunicationInfo.c" />
+    <ClCompile Include="RaceEntriesInfo.c" />
     <ClCompile Include="RaceEventInfo.c" />
     <ClCompile Include="RaceLapInfo.c" />
     <ClCompile Include="RaceRemoveEntryInfo.c" />
@@ -173,6 +174,7 @@
     <ClInclude Include="RaceAddEntryInfo.h" />
     <ClInclude Include="RaceClassificationInfo.h" />
     <ClInclude Include="RaceCommunicationInfo.h" />
+    <ClInclude Include="RaceEntriesInfo.h" />
     <ClInclude Include="RaceEventInfo.h" />
     <ClInclude Include="RaceLapInfo.h" />
     <ClInclude Include="RaceRemoveEntryInfo.h" />
