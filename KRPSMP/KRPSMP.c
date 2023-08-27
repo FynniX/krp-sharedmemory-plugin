@@ -72,7 +72,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 2;
+	pluginInfoView->m_PluginVersion = 3;
 	updatePluginInfo(logFile);
 
 	/*
@@ -274,7 +274,12 @@ void RaceSession(void* _pData, int _iDataSize) {
 /* This function is optional */
 void RaceSessionState(void* _pData, int _iDataSize) {
 	raceSessionStateInfoView->m_RaceSessionState = *((SPluginsRaceSessionState_t*)_pData);
+	raceSessionInfoView->m_RaceSession.m_iSession = raceSessionStateInfoView->m_RaceSessionState.m_iSession;
+	raceSessionInfoView->m_RaceSession.m_iSessionSeries = raceSessionStateInfoView->m_RaceSessionState.m_iSessionSeries;
+	raceSessionInfoView->m_RaceSession.m_iSessionState = raceSessionStateInfoView->m_RaceSessionState.m_iSessionState;
+	raceSessionInfoView->m_RaceSession.m_iSessionLength = raceSessionStateInfoView->m_RaceSessionState.m_iSessionLength;
 	updateRaceSessionStateInfo(logFile);
+	updateRaceSessionInfo(logFile);
 }
 
 /* This function is optional */
