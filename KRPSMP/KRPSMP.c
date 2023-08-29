@@ -72,7 +72,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 3;
+	pluginInfoView->m_PluginVersion = 4;
 	updatePluginInfo(logFile);
 
 	/*
@@ -317,7 +317,16 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 	raceClassificationInfoView->m_RaceClassification = *(psRaceClassification);
 	for (int i = 0; i < 100; i++) {
 		if (i < psRaceClassification->m_iNumEntries) {
-			raceClassificationInfoView->m_RaceEntries[i] = *(pasRaceClassificationEntry + i);
+			int oldGap = raceClassificationInfoView->m_RaceEntries[i].m_iGap;
+			int oldGapLaps = raceClassificationInfoView->m_RaceEntries[i].m_iGapLaps;
+			SPluginsRaceClassificationEntry_t entry = *(pasRaceClassificationEntry + i);
+
+			if ((oldGap > 0 && entry.m_iGap == 0) || (oldGapLaps > 0 && entry.m_iGapLaps == 0)) {
+				entry.m_iGap = oldGap;
+				entry.m_iGapLaps = oldGapLaps;
+			}
+
+			raceClassificationInfoView->m_RaceEntries[i] = entry;
 		}
 		else {
 			SPluginsRaceClassificationEntry_t data = { 0 };
