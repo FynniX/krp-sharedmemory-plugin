@@ -342,7 +342,7 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 			out.m_iRaceNum = entry.m_iRaceNum;
 			out.m_iState = entry.m_iState;
 			out.m_iBestLap = entry.m_iBestLap;
-			out.m_iLastLap = lastLaps[i];
+			out.m_LastLap = lastLaps[i];
 			out.m_fBestSpeed = entry.m_fBestSpeed;
 			out.m_iBestLapNum = entry.m_iBestLapNum;
 			out.m_iNumLaps = entry.m_iNumLaps;
