@@ -72,7 +72,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 4;
+	pluginInfoView->m_PluginVersion = 5;
 	updatePluginInfo(logFile);
 
 	/*
@@ -285,6 +285,17 @@ void RaceSessionState(void* _pData, int _iDataSize) {
 /* This function is optional */
 void RaceLap(void* _pData, int _iDataSize) {
 	raceLapInfoView->m_RaceLap = *((SPluginsRaceLap_t*)_pData);
+
+	int index = -1;
+	int raceNum = raceLapInfoView->m_RaceLap.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (raceNum != currentRaceNum) continue;
+		index = i;
+		break;
+	}
+
+	lastLaps[index] = raceLapInfoView->m_RaceLap;
 	updateRaceLapInfo(logFile);
 }
 
@@ -320,16 +331,29 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 			int oldGap = raceClassificationInfoView->m_RaceEntries[i].m_iGap;
 			int oldGapLaps = raceClassificationInfoView->m_RaceEntries[i].m_iGapLaps;
 			SPluginsRaceClassificationEntry_t entry = *(pasRaceClassificationEntry + i);
+			
 
 			if ((oldGap > 0 && entry.m_iGap == 0) || (oldGapLaps > 0 && entry.m_iGapLaps == 0)) {
 				entry.m_iGap = oldGap;
 				entry.m_iGapLaps = oldGapLaps;
 			}
 
-			raceClassificationInfoView->m_RaceEntries[i] = entry;
+			SPluginsRaceClassificationEntry2_t out;
+			out.m_iRaceNum = entry.m_iRaceNum;
+			out.m_iState = entry.m_iState;
+			out.m_iBestLap = entry.m_iBestLap;
+			out.m_iLastLap = lastLaps[i];
+			out.m_fBestSpeed = entry.m_fBestSpeed;
+			out.m_iBestLapNum = entry.m_iBestLapNum;
+			out.m_iNumLaps = entry.m_iNumLaps;
+			out.m_iGap = entry.m_iGap;
+			out.m_iGapLaps = entry.m_iGapLaps;
+			out.m_iPenalty = entry.m_iPenalty;
+			out.m_iPit = entry.m_iPit;
+			raceClassificationInfoView->m_RaceEntries[i] = out;
 		}
 		else {
-			SPluginsRaceClassificationEntry_t data = { 0 };
+			SPluginsRaceClassificationEntry2_t data = { 0 };
 			raceClassificationInfoView->m_RaceEntries[i] = data;
 		}
 	}

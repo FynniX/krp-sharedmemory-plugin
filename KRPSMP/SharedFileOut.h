@@ -103,10 +103,25 @@ typedef struct {
 	SPluginsRaceCommunication_t m_RaceCommunication;
 } RaceCommunicationInfo_t;
 
+typedef struct
+{
+	int m_iRaceNum;										/* race number */
+	int m_iState;										/* 1 = DNS; 2 = retired; 3 = DSQ */
+	int m_iBestLap;										/* milliseconds */
+	SPluginsRaceLap_t m_iLastLap;										/* milliseconds */
+	float m_fBestSpeed;									/* meters/second */
+	int m_iBestLapNum;									/* best lap index */
+	int m_iNumLaps;										/* number of laps */
+	int m_iGap;											/* milliseconds */
+	int m_iGapLaps;
+	int m_iPenalty;										/* milliseconds */
+	int m_iPit;											/* 0 = on track; 1 = in the pits */
+} SPluginsRaceClassificationEntry2_t;
+
 typedef struct {
 	int m_id;    													/* message id */
 	SPluginsRaceClassification_t m_RaceClassification;
-	SPluginsRaceClassificationEntry_t m_RaceEntries[100];
+	SPluginsRaceClassificationEntry2_t m_RaceEntries[100];
 } RaceClassificationInfo_t;
 
 typedef struct {

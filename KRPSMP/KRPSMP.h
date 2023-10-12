@@ -7,6 +7,7 @@
 #endif
 
 FILE* logFile;
+SPluginsRaceLap_t lastLaps[100];
 
 KRPSMP_API char* GetModID();
 KRPSMP_API int GetModDataVersion();
