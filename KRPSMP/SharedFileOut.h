@@ -109,6 +109,10 @@ typedef struct
 	int m_iState;										/* 1 = DNS; 2 = retired; 3 = DSQ */
 	int m_iBestLap;										/* milliseconds */
 	SPluginsRaceLap_t m_LastLap;
+	SPluginsRaceSplit_t m_LastSplit;
+	SPluginsRaceSpeed_t m_LastSpeed;
+	SPluginsRaceCommunication_t m_LastCommunication;
+	SPluginsRaceVehicleData_t m_LastVehicleData;
 	float m_fBestSpeed;									/* meters/second */
 	int m_iBestLapNum;									/* best lap index */
 	int m_iNumLaps;										/* number of laps */

@@ -72,7 +72,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 5;
+	pluginInfoView->m_PluginVersion = 6;
 	updatePluginInfo(logFile);
 
 	/*
@@ -302,18 +302,51 @@ void RaceLap(void* _pData, int _iDataSize) {
 /* This function is optional */
 void RaceSplit(void* _pData, int _iDataSize) {
 	raceSplitInfoView->m_RaceSplit = *((SPluginsRaceSplit_t*)_pData);
+
+	int index = -1;
+	int raceNum = raceSplitInfoView->m_RaceSplit.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (raceNum != currentRaceNum) continue;
+		index = i;
+		break;
+	}
+
+	lastSplits[index] = raceSplitInfoView->m_RaceSplit;
 	updateRaceSplitInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSpeed(void* _pData, int _iDataSize) {
 	raceSpeedInfoView->m_RaceSpeed = *((SPluginsRaceSpeed_t*)_pData);
+
+	int index = -1;
+	int raceNum = raceSpeedInfoView->m_RaceSpeed.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (raceNum != currentRaceNum) continue;
+		index = i;
+		break;
+	}
+
+	lastSpeeds[index] = raceSpeedInfoView->m_RaceSpeed;
 	updateRaceSpeedInfo(logFile);
 }
 
 /* This function is optional */
 void RaceCommunication(void* _pData, int _iDataSize) {
 	raceCommunicationInfoView->m_RaceCommunication = *((SPluginsRaceCommunication_t*)_pData);
+
+	int index = -1;
+	int raceNum = raceCommunicationInfoView->m_RaceCommunication.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (raceNum != currentRaceNum) continue;
+		index = i;
+		break;
+	}
+
+	lastCommunications[index] = raceCommunicationInfoView->m_RaceCommunication;
 	updateRaceCommunicationInfo(logFile);
 }
 
@@ -343,6 +376,10 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 			out.m_iState = entry.m_iState;
 			out.m_iBestLap = entry.m_iBestLap;
 			out.m_LastLap = lastLaps[i];
+			out.m_LastSplit = lastSplits[i];
+			out.m_LastSpeed = lastSpeeds[i];
+			out.m_LastCommunication = lastCommunications[i];
+			out.m_LastVehicleData = lastVehicleDatas[i];
 			out.m_fBestSpeed = entry.m_fBestSpeed;
 			out.m_iBestLapNum = entry.m_iBestLapNum;
 			out.m_iNumLaps = entry.m_iNumLaps;
@@ -385,5 +422,16 @@ void RaceTrackPosition(int _iNumVehicles, void* _pArray, int _iElemSize) {
 /* This function is optional */
 void RaceVehicleData(void* _pData, int _iDataSize) {
 	raceVehicleDataInfoView->m_RaceVehicleData = *((SPluginsRaceVehicleData_t*)_pData);
+
+	int index = -1;
+	int raceNum = raceVehicleDataInfoView->m_RaceVehicleData.m_iRaceNum;
+	for (int i = 0; i < 100; i++) {
+		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
+		if (raceNum != currentRaceNum) continue;
+		index = i;
+		break;
+	}
+
+	lastVehicleDatas[index] = raceVehicleDataInfoView->m_RaceVehicleData;
 	updateRaceVehicleDataInfo(logFile);
 }
