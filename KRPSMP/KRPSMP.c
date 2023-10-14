@@ -72,7 +72,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 6;
+	pluginInfoView->m_PluginVersion = 7;
 	updatePluginInfo(logFile);
 
 	/*
@@ -284,10 +284,10 @@ void RaceSessionState(void* _pData, int _iDataSize) {
 
 /* This function is optional */
 void RaceLap(void* _pData, int _iDataSize) {
-	raceLapInfoView->m_RaceLap = *((SPluginsRaceLap_t*)_pData);
+	SPluginsRaceLap_t data = *((SPluginsRaceLap_t*)_pData);
 
 	int index = -1;
-	int raceNum = raceLapInfoView->m_RaceLap.m_iRaceNum;
+	int raceNum = data.m_iRaceNum;
 	for (int i = 0; i < 100; i++) {
 		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
 		if (raceNum != currentRaceNum) continue;
@@ -295,16 +295,16 @@ void RaceLap(void* _pData, int _iDataSize) {
 		break;
 	}
 
-	lastLaps[index] = raceLapInfoView->m_RaceLap;
+	raceLapInfoView->m_RaceLap[index + 1] = data;
 	updateRaceLapInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSplit(void* _pData, int _iDataSize) {
-	raceSplitInfoView->m_RaceSplit = *((SPluginsRaceSplit_t*)_pData);
+	SPluginsRaceSplit_t data = *((SPluginsRaceSplit_t*)_pData);
 
 	int index = -1;
-	int raceNum = raceSplitInfoView->m_RaceSplit.m_iRaceNum;
+	int raceNum = data.m_iRaceNum;
 	for (int i = 0; i < 100; i++) {
 		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
 		if (raceNum != currentRaceNum) continue;
@@ -312,16 +312,16 @@ void RaceSplit(void* _pData, int _iDataSize) {
 		break;
 	}
 
-	lastSplits[index] = raceSplitInfoView->m_RaceSplit;
+	raceSplitInfoView->m_RaceSplit[index + 1] = data;
 	updateRaceSplitInfo(logFile);
 }
 
 /* This function is optional */
 void RaceSpeed(void* _pData, int _iDataSize) {
-	raceSpeedInfoView->m_RaceSpeed = *((SPluginsRaceSpeed_t*)_pData);
+	SPluginsRaceSpeed_t data = *((SPluginsRaceSpeed_t*)_pData);
 
 	int index = -1;
-	int raceNum = raceSpeedInfoView->m_RaceSpeed.m_iRaceNum;
+	int raceNum = data.m_iRaceNum;
 	for (int i = 0; i < 100; i++) {
 		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
 		if (raceNum != currentRaceNum) continue;
@@ -329,16 +329,16 @@ void RaceSpeed(void* _pData, int _iDataSize) {
 		break;
 	}
 
-	lastSpeeds[index] = raceSpeedInfoView->m_RaceSpeed;
+	raceSpeedInfoView->m_RaceSpeed[index + 1] = data;
 	updateRaceSpeedInfo(logFile);
 }
 
 /* This function is optional */
 void RaceCommunication(void* _pData, int _iDataSize) {
-	raceCommunicationInfoView->m_RaceCommunication = *((SPluginsRaceCommunication_t*)_pData);
+	SPluginsRaceCommunication_t data = *((SPluginsRaceCommunication_t*)_pData);
 
 	int index = -1;
-	int raceNum = raceCommunicationInfoView->m_RaceCommunication.m_iRaceNum;
+	int raceNum = data.m_iRaceNum;
 	for (int i = 0; i < 100; i++) {
 		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
 		if (raceNum != currentRaceNum) continue;
@@ -346,7 +346,7 @@ void RaceCommunication(void* _pData, int _iDataSize) {
 		break;
 	}
 
-	lastCommunications[index] = raceCommunicationInfoView->m_RaceCommunication;
+	raceCommunicationInfoView->m_RaceCommunication[index + 1] = data;
 	updateRaceCommunicationInfo(logFile);
 }
 
@@ -371,26 +371,10 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 				entry.m_iGapLaps = oldGapLaps;
 			}
 
-			SPluginsRaceClassificationEntry2_t out;
-			out.m_iRaceNum = entry.m_iRaceNum;
-			out.m_iState = entry.m_iState;
-			out.m_iBestLap = entry.m_iBestLap;
-			out.m_LastLap = lastLaps[i];
-			out.m_LastSplit = lastSplits[i];
-			out.m_LastSpeed = lastSpeeds[i];
-			out.m_LastCommunication = lastCommunications[i];
-			out.m_LastVehicleData = lastVehicleDatas[i];
-			out.m_fBestSpeed = entry.m_fBestSpeed;
-			out.m_iBestLapNum = entry.m_iBestLapNum;
-			out.m_iNumLaps = entry.m_iNumLaps;
-			out.m_iGap = entry.m_iGap;
-			out.m_iGapLaps = entry.m_iGapLaps;
-			out.m_iPenalty = entry.m_iPenalty;
-			out.m_iPit = entry.m_iPit;
-			raceClassificationInfoView->m_RaceEntries[i] = out;
+			raceClassificationInfoView->m_RaceEntries[i] = entry;
 		}
 		else {
-			SPluginsRaceClassificationEntry2_t data = { 0 };
+			SPluginsRaceClassificationEntry_t data = { 0 };
 			raceClassificationInfoView->m_RaceEntries[i] = data;
 		}
 	}
@@ -421,10 +405,10 @@ void RaceTrackPosition(int _iNumVehicles, void* _pArray, int _iElemSize) {
 
 /* This function is optional */
 void RaceVehicleData(void* _pData, int _iDataSize) {
-	raceVehicleDataInfoView->m_RaceVehicleData = *((SPluginsRaceVehicleData_t*)_pData);
+	SPluginsRaceVehicleData_t data = *((SPluginsRaceVehicleData_t*)_pData);
 
 	int index = -1;
-	int raceNum = raceVehicleDataInfoView->m_RaceVehicleData.m_iRaceNum;
+	int raceNum = data.m_iRaceNum;
 	for (int i = 0; i < 100; i++) {
 		int currentRaceNum = raceEntriesInfoView->m_RaceEntries[i].m_iRaceNum;
 		if (raceNum != currentRaceNum) continue;
@@ -432,6 +416,6 @@ void RaceVehicleData(void* _pData, int _iDataSize) {
 		break;
 	}
 
-	lastVehicleDatas[index] = raceVehicleDataInfoView->m_RaceVehicleData;
+	raceVehicleDataInfoView->m_RaceVehicleData[index + 1] = data;
 	updateRaceVehicleDataInfo(logFile);
 }

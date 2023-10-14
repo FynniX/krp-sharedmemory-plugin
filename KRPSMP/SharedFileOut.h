@@ -85,47 +85,28 @@ typedef struct {
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceLap_t m_RaceLap;
+	SPluginsRaceLap_t m_RaceLap[101];
 } RaceLapInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSplit_t m_RaceSplit;
+	SPluginsRaceSplit_t m_RaceSplit[101];
 } RaceSplitInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSpeed_t m_RaceSpeed;
+	SPluginsRaceSpeed_t m_RaceSpeed[101];
 } RaceSpeedInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceCommunication_t m_RaceCommunication;
+	SPluginsRaceCommunication_t m_RaceCommunication[101];
 } RaceCommunicationInfo_t;
-
-typedef struct
-{
-	int m_iRaceNum;										/* race number */
-	int m_iState;										/* 1 = DNS; 2 = retired; 3 = DSQ */
-	int m_iBestLap;										/* milliseconds */
-	SPluginsRaceLap_t m_LastLap;
-	SPluginsRaceSplit_t m_LastSplit;
-	SPluginsRaceSpeed_t m_LastSpeed;
-	SPluginsRaceCommunication_t m_LastCommunication;
-	SPluginsRaceVehicleData_t m_LastVehicleData;
-	float m_fBestSpeed;									/* meters/second */
-	int m_iBestLapNum;									/* best lap index */
-	int m_iNumLaps;										/* number of laps */
-	int m_iGap;											/* milliseconds */
-	int m_iGapLaps;
-	int m_iPenalty;										/* milliseconds */
-	int m_iPit;											/* 0 = on track; 1 = in the pits */
-} SPluginsRaceClassificationEntry2_t;
 
 typedef struct {
 	int m_id;    													/* message id */
 	SPluginsRaceClassification_t m_RaceClassification;
-	SPluginsRaceClassificationEntry2_t m_RaceEntries[100];
+	SPluginsRaceClassificationEntry_t m_RaceEntries[100];
 } RaceClassificationInfo_t;
 
 typedef struct {
@@ -136,5 +117,5 @@ typedef struct {
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceVehicleData_t m_RaceVehicleData;
+	SPluginsRaceVehicleData_t m_RaceVehicleData[101];
 } RaceVehicleDataInfo_t;

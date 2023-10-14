@@ -7,11 +7,6 @@
 #endif
 
 FILE* logFile;
-SPluginsRaceLap_t lastLaps[100];
-SPluginsRaceSplit_t lastSplits[100];
-SPluginsRaceSpeed_t lastSpeeds[100];
-SPluginsRaceCommunication_t lastCommunications[100];
-SPluginsRaceVehicleData_t lastVehicleDatas[100];
 
 KRPSMP_API char* GetModID();
 KRPSMP_API int GetModDataVersion();
