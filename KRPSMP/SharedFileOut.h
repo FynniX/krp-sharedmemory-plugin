@@ -85,22 +85,22 @@ typedef struct {
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceLap_t m_RaceLap[101];
+	SPluginsRaceLap_t m_RaceLaps[101];
 } RaceLapInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSplit_t m_RaceSplit[101];
+	SPluginsRaceSplit_t m_RaceSplits[101];
 } RaceSplitInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceSpeed_t m_RaceSpeed[101];
+	SPluginsRaceSpeed_t m_RaceSpeeds[101];
 } RaceSpeedInfo_t;
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceCommunication_t m_RaceCommunication[101];
+	SPluginsRaceCommunication_t m_RaceCommunications[101];
 } RaceCommunicationInfo_t;
 
 typedef struct {
@@ -117,5 +117,5 @@ typedef struct {
 
 typedef struct {
 	int m_id;    													/* message id */
-	SPluginsRaceVehicleData_t m_RaceVehicleData[101];
+	SPluginsRaceVehicleData_t m_RaceVehicleDatas[101];
 } RaceVehicleDataInfo_t;
