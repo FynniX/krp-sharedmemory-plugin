@@ -15,6 +15,7 @@ int initRaceSplitInfo(FILE* logFile) {
 
 	raceSplitInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceSplit Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitRaceSplitInfo(FILE* logFile) {
 			raceSplitInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: RaceSplit Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateRaceSplitInfo(FILE* logFile) {
 	raceSplitInfoView->m_id = raceSplitInfoView->m_id + 1;
 	FlushViewOfFile(raceSplitInfoView, sizeof(RaceSplitInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceSplit Info update\n");
 }

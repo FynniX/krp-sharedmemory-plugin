@@ -15,6 +15,7 @@ int initPluginInfo(FILE* logFile) {
 
 	pluginInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: Plugin Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitPluginInfo(FILE* logFile) {
 			pluginInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: Plugin Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updatePluginInfo(FILE* logFile) {
 	pluginInfoView->m_id = pluginInfoView->m_id + 1;
 	FlushViewOfFile(pluginInfoView, sizeof(PluginInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: Plugin Info update\n");
 }

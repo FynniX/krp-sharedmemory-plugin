@@ -6,6 +6,7 @@
 Configuration_t getConfiguration() {
 	Configuration_t configuration = {0};
 
+	configuration.logging = GetPrivateProfileInt(L"params", L"logging", 0, L"./krpsmp.ini");
 	configuration.enable = GetPrivateProfileInt(L"params", L"enable", 0, L"./krpsmp.ini");
 	configuration.rate = GetPrivateProfileInt(L"params", L"rate", 3, L"./krpsmp.ini");
 

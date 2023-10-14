@@ -15,6 +15,7 @@ int initRaceTrackPositionInfo(FILE* logFile) {
 
 	raceTrackPositionInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceTrackPosition Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitRaceTrackPositionInfo(FILE* logFile) {
 			raceTrackPositionInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: RaceTrackPosition Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateRaceTrackPositionInfo(FILE* logFile) {
 	raceTrackPositionInfoView->m_id = raceTrackPositionInfoView->m_id + 1;
 	FlushViewOfFile(raceTrackPositionInfoView, sizeof(RaceTrackPositionInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceTrackPosition Info update\n");
 }

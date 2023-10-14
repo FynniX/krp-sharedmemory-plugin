@@ -15,6 +15,7 @@ int initRaceSessionStateInfo(FILE* logFile) {
 
 	raceSessionStateInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceSessionState Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitRaceSessionStateInfo(FILE* logFile) {
 			raceSessionStateInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: RaceSessionState Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateRaceSessionStateInfo(FILE* logFile) {
 	raceSessionStateInfoView->m_id = raceSessionStateInfoView->m_id + 1;
 	FlushViewOfFile(raceSessionStateInfoView, sizeof(RaceSessionStateInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceSessionState Info update\n");
 }

@@ -15,6 +15,7 @@ int initRaceLapInfo(FILE* logFile) {
 
 	raceLapInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceLap Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitRaceLapInfo(FILE* logFile) {
 			raceLapInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: RaceLap Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateRaceLapInfo(FILE* logFile) {
 	raceLapInfoView->m_id = raceLapInfoView->m_id + 1;
 	FlushViewOfFile(raceLapInfoView, sizeof(RaceLapInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceLap Info update\n");
 }

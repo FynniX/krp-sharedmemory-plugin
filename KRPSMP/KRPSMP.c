@@ -40,13 +40,15 @@ int GetInterfaceVersion() {
 
 /* called when software is started */
 int Startup(char* _szSavePath) {
-	fopen_s(&logFile, "krpsmp_log.txt", "wt");
-	if (!logFile) return -1;
-
-	fprintf(logFile, "KRPSMP: Startup\n");
-
 	Configuration_t config = getConfiguration();
 	if (config.enable == 0 || config.rate == -1) return -1;
+
+	if(config.logging == 1)
+		fopen_s(&logFile, "krpsmp_log.txt", "wt");
+	if (!logFile && config.logging == 1) return -1;
+
+	if (logFile)
+		fprintf(logFile, "KRPSMP: Startup\n");
 
 	if (initPluginInfo(logFile) == -1) return -1;
 	if (initKartEventInfo(logFile) == -1) return -1;
@@ -72,7 +74,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 7;
+	pluginInfoView->m_PluginVersion = 8;
 	updatePluginInfo(logFile);
 
 	/*
@@ -84,7 +86,8 @@ int Startup(char* _szSavePath) {
 
 /* called when software is closed */
 void Shutdown() {
-	fprintf(logFile, "KRPSMP: Shutdown\n");
+	if (logFile)
+		fprintf(logFile, "KRPSMP: Shutdown\n");
 
 	SPluginsRaceAddEntry_t emptyEntry = { 0 };
 	for (int i = 0; i < 100; i++)

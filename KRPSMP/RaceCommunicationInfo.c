@@ -15,6 +15,7 @@ int initRaceCommunicationInfo(FILE* logFile) {
 
 	raceCommunicationInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceCommunication Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitRaceCommunicationInfo(FILE* logFile) {
 			raceCommunicationInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: RaceCommunication Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateRaceCommunicationInfo(FILE* logFile) {
 	raceCommunicationInfoView->m_id = raceCommunicationInfoView->m_id + 1;
 	FlushViewOfFile(raceCommunicationInfoView, sizeof(RaceCommunicationInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: RaceCommunication Info update\n");
 }

@@ -15,6 +15,7 @@ int initKartSessionInfo(FILE* logFile) {
 
 	kartSessionInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: kartSession Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitKartSessionInfo(FILE* logFile) {
 			kartSessionInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: KartSession Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateKartSessionInfo(FILE* logFile) {
 	kartSessionInfoView->m_id = kartSessionInfoView->m_id + 1;
 	FlushViewOfFile(kartSessionInfoView, sizeof(KartSessionInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: KartSession Info update\n");
 }

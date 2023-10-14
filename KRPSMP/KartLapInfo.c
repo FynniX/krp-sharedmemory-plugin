@@ -15,6 +15,7 @@ int initKartLapInfo(FILE* logFile) {
 
 	kartLapInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: kartLap Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitKartLapInfo(FILE* logFile) {
 			kartLapInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: KartLap Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateKartLapInfo(FILE* logFile) {
 	kartLapInfoView->m_id = kartLapInfoView->m_id + 1;
 	FlushViewOfFile(kartLapInfoView, sizeof(KartLapInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: KartLap Info update\n");
 }

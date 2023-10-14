@@ -15,6 +15,7 @@ int initKartTelemetryInfo(FILE* logFile) {
 
 	kartTelemetryInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: kartTelemetry Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitKartTelemetryInfo(FILE* logFile) {
 			kartTelemetryInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: KartTelemetry Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateKartTelemetryInfo(FILE* logFile) {
 	kartTelemetryInfoView->m_id = kartTelemetryInfoView->m_id + 1;
 	FlushViewOfFile(kartTelemetryInfoView, sizeof(KartTelemetryInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: KartTelemetry Info update\n");
 }

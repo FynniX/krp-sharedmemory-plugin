@@ -15,6 +15,7 @@ int initKartSplitInfo(FILE* logFile) {
 
 	kartSplitInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: kartSplit Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitKartSplitInfo(FILE* logFile) {
 			kartSplitInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: KartSplit Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateKartSplitInfo(FILE* logFile) {
 	kartSplitInfoView->m_id = kartSplitInfoView->m_id + 1;
 	FlushViewOfFile(kartSplitInfoView, sizeof(KartSplitInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: KartSplit Info update\n");
 }

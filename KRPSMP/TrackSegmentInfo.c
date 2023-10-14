@@ -15,6 +15,7 @@ int initTrackSegmentInfo(FILE* logFile) {
 
 	trackSegmentInfoView->m_id = -1;
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: TrackSegment Info initialised\n");
 
 	return 1;
@@ -33,6 +34,7 @@ void deinitTrackSegmentInfo(FILE* logFile) {
 			trackSegmentInfoFile = NULL;
 		}
 
+		if (logFile)
 		fprintf(logFile, "KRPSMP: TrackSegment Info deinitialised\n");
 	}
 }
@@ -41,5 +43,6 @@ void updateTrackSegmentInfo(FILE* logFile) {
 	trackSegmentInfoView->m_id = trackSegmentInfoView->m_id + 1;
 	FlushViewOfFile(trackSegmentInfoView, sizeof(TrackSegmentInfo_t));
 
+	if (logFile)
 	fprintf(logFile, "KRPSMP: TrackSegment Info update\n");
 }
