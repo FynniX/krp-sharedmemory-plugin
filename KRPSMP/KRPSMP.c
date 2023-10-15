@@ -74,7 +74,7 @@ int Startup(char* _szSavePath) {
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 9;
+	pluginInfoView->m_PluginVersion = 10;
 	updatePluginInfo(logFile);
 
 	/*
@@ -298,6 +298,7 @@ void RaceLap(void* _pData, int _iDataSize) {
 		break;
 	}
 
+	raceLapInfoView->m_RaceLaps[0] = data;
 	raceLapInfoView->m_RaceLaps[index + 1] = data;
 	updateRaceLapInfo(logFile);
 }
@@ -315,6 +316,7 @@ void RaceSplit(void* _pData, int _iDataSize) {
 		break;
 	}
 
+	raceSplitInfoView->m_RaceSplits[0] = data;
 	raceSplitInfoView->m_RaceSplits[index + 1] = data;
 	updateRaceSplitInfo(logFile);
 }
@@ -332,6 +334,7 @@ void RaceSpeed(void* _pData, int _iDataSize) {
 		break;
 	}
 
+	raceSpeedInfoView->m_RaceSpeeds[0] = data;
 	raceSpeedInfoView->m_RaceSpeeds[index + 1] = data;
 	updateRaceSpeedInfo(logFile);
 }
@@ -349,6 +352,7 @@ void RaceCommunication(void* _pData, int _iDataSize) {
 		break;
 	}
 
+	raceCommunicationInfoView->m_RaceCommunications[0] = data;
 	raceCommunicationInfoView->m_RaceCommunications[index + 1] = data;
 	updateRaceCommunicationInfo(logFile);
 }
@@ -419,6 +423,7 @@ void RaceVehicleData(void* _pData, int _iDataSize) {
 		break;
 	}
 
+	raceVehicleDataInfoView->m_RaceVehicleDatas[0] = data;
 	raceVehicleDataInfoView->m_RaceVehicleDatas[index + 1] = data;
 	updateRaceVehicleDataInfo(logFile);
 }
