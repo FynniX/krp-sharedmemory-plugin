@@ -38,3 +38,6 @@ KRPSMP_API void RaceCommunication(void* _pData, int _iDataSize);
 KRPSMP_API void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemSize);
 KRPSMP_API void RaceTrackPosition(int _iNumVehicles, void* _pArray, int _iElemSize);
 KRPSMP_API void RaceVehicleData(void* _pData, int _iDataSize);
+
+KRPSMP_API int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection, int* _piSelect);
+KRPSMP_API int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, int* _piSelect);

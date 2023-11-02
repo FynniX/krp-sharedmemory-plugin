@@ -81,6 +81,9 @@
     <ClCompile Include="RaceEntriesInfo.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="CameraInfo.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharedFileIn.h">
@@ -153,6 +156,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="RaceEntriesInfo.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraInfo.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

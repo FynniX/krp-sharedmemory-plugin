@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraInfo.cpp" />
     <ClCompile Include="Configuration.c" />
     <ClCompile Include="KartEventInfo.c" />
     <ClCompile Include="KartLapInfo.c" />
@@ -163,6 +164,7 @@
     <ClCompile Include="TrackSegmentInfo.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraInfo.h" />
     <ClInclude Include="Configuration.h" />
     <ClInclude Include="KartEventInfo.h" />
     <ClInclude Include="KartLapInfo.h" />

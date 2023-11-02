@@ -252,3 +252,12 @@ typedef struct
 	float m_fBrake;										/* 0 to 1 */
 } SPluginsRaceVehicleData_t;
 
+/******************************************************************************
+structures and functions to control the replay
+******************************************************************************/
+
+typedef struct
+{
+	int m_iRaceNum;
+	char m_szName[100];
+} SPluginsSpectateVehicle_t;

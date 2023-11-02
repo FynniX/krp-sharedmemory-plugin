@@ -24,6 +24,7 @@
 #include "RaceClassificationInfo.h"
 #include "RaceTrackPositionInfo.h"
 #include "RaceVehicleDataInfo.h"
+#include "CameraInfo.h"
 #include "KRPSMP.h"
 
 char* GetModID() {
@@ -72,9 +73,10 @@ int Startup(char* _szSavePath) {
 	if (initRaceClassificationInfo(logFile) == -1) return -1;
 	if (initRaceTrackPositionInfo(logFile) == -1) return -1;
 	if (initRaceVehicleDataInfo(logFile) == -1) return -1;
+	if (initCameraInfo(logFile) == -1) return -1;
 
 	pluginInfoView->m_PluginRate = config.rate;
-	pluginInfoView->m_PluginVersion = 10;
+	pluginInfoView->m_PluginVersion = 11;
 	updatePluginInfo(logFile);
 
 	/*
@@ -120,6 +122,7 @@ void Shutdown() {
 	deinitRaceClassificationInfo(logFile);
 	deinitRaceTrackPositionInfo(logFile);
 	deinitRaceVehicleDataInfo(logFile);
+	deinitCameraInfo(logFile);
 
 	if (logFile) fclose(logFile);
 }
@@ -426,4 +429,29 @@ void RaceVehicleData(void* _pData, int _iDataSize) {
 	raceVehicleDataInfoView->m_RaceVehicleDatas[0] = data;
 	raceVehicleDataInfoView->m_RaceVehicleDatas[index + 1] = data;
 	updateRaceVehicleDataInfo(logFile);
+}
+
+/* Return 1 if _piSelect is set, from 0 to _iNumVehicles - 1 */
+int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection, int* _piSelect)
+{
+	SPluginsSpectateVehicle_t* pasVehicleData;
+
+	pasVehicleData = (SPluginsSpectateVehicle_t*)_pVehicleData;
+
+	return 0;
+}
+
+/* Return 1 if _piSelect is set, from 0 to _iNumCameras - 1 */
+int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, int* _piSelect)
+{
+	char* pszCameraName;
+	int i;
+
+	pszCameraName = (char*)_pCameraData;
+	for (i = 0; i < _iNumCameras; i++)
+	{
+		pszCameraName += strlen(pszCameraName) + 1;
+	}
+
+	return 0;
 }

@@ -119,3 +119,35 @@ typedef struct {
 	int m_id;    													/* message id */
 	SPluginsRaceVehicleData_t m_RaceVehicleDatas[101];
 } RaceVehicleDataInfo_t;
+
+enum CameraType {
+	None,
+	Vehicle,
+	Camera
+};
+
+typedef struct {
+	int m_id;
+	enum CameraType cameraType;
+	int selectedCamera;
+} CameraSet_t;
+
+typedef struct {
+	int _iNumVehicles;
+	SPluginsSpectateVehicle_t m_VehicleData;
+	int _iCurSelection;
+	int _piSelect;
+} CameraVehiclesInfo_t;
+
+typedef struct {
+	int _iNumCameras;
+	char m_CameraNames[100][100];
+	int _iCurSelection;
+	int _piSelect;
+} CameraCamerasInfo_t;
+
+typedef struct {
+	int m_id;
+	CameraVehiclesInfo_t m_VehiclesInfo;
+	CameraCamerasInfo_t m_CamerasInfo;
+} CameraInfo_t;
