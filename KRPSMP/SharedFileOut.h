@@ -120,15 +120,10 @@ typedef struct {
 	SPluginsRaceVehicleData_t m_RaceVehicleDatas[101];
 } RaceVehicleDataInfo_t;
 
-enum CameraType {
-	None,
-	Vehicle,
-	Camera
-};
-
 typedef struct {
 	int m_id;
-	enum CameraType cameraType;
+	int isControlled;
+	int selectedVehicle;
 	int selectedCamera;
 } CameraSet_t;
 
@@ -141,7 +136,7 @@ typedef struct {
 
 typedef struct {
 	int _iNumCameras;
-	char m_CameraNames[100][100];
+	char m_CameraNames[50][100];
 	int _iCurSelection;
 	int _piSelect;
 } CameraCamerasInfo_t;

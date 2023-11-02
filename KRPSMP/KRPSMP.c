@@ -440,9 +440,16 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 	CameraVehiclesInfo_t vehiclesInfo;
 	SPluginsSpectateVehicle_t data = *((SPluginsSpectateVehicle_t*)_pVehicleData);
 
+	int select = 0;
 	CameraSet_t* cameraSetData = getCameraSet(logFile);
-	if (cameraSetData != NULL && cameraSetData->cameraType == Vehicle && _iCurSelection != cameraSetData->selectedCamera)
-		_piSelect = &cameraSetData->selectedCamera;
+	if (cameraSetData != NULL && cameraSetData->isControlled == 1) {
+		if (cameraSetData->selectedVehicle != _iCurSelection && cameraSetData->selectedVehicle >= 0 && cameraSetData->selectedVehicle < _iNumVehicles) {
+			select = 1;
+			_piSelect = &(cameraSetData->selectedVehicle);
+		} else {
+			select = 0;
+		}
+	}
 
 	vehiclesInfo._iNumVehicles = _iNumVehicles;
 	vehiclesInfo._iCurSelection = _iCurSelection;
@@ -452,10 +459,7 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 	cameraInfoView->m_VehiclesInfo = vehiclesInfo;
 	updateCameraInfo(logFile);
 
-	if (*(_piSelect) >= 0 && *(_piSelect) < _iNumVehicles)
-		return 1;
-	else
-		return 0;
+	return select;
 }
 
 /* Return 1 if _piSelect is set, from 0 to _iNumCameras - 1 */
@@ -464,15 +468,23 @@ int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, in
 	CameraCamerasInfo_t camerasInfo;
 	char* pszCameraName = (char*)_pCameraData;
 
+	int select = 0;
 	CameraSet_t* cameraSetData = getCameraSet(logFile);
-	if (cameraSetData != NULL && cameraSetData->cameraType == Camera && _iCurSelection != cameraSetData->selectedCamera)
-		_piSelect = &cameraSetData->selectedCamera;
+	if (cameraSetData != NULL && cameraSetData->isControlled == 1) {
+		if (cameraSetData->selectedCamera != _iCurSelection && cameraSetData->selectedCamera >= 0 && cameraSetData->selectedCamera < _iNumCameras) {
+			select = 1;
+			_piSelect = &(cameraSetData->selectedVehicle);
+		}
+		else {
+			select = 0;
+		}
+	}
 
 	camerasInfo._iNumCameras = _iNumCameras;
 	camerasInfo._iCurSelection = _iCurSelection;
 	camerasInfo._piSelect = *(_piSelect);
 
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 50; i++) {
 		if (i < _iNumCameras) {
 			size_t length = strlen(pszCameraName) + 1;
 			pszCameraName += length;
@@ -482,8 +494,5 @@ int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, in
 		}
 	}
 
-	if (*(_piSelect) >= 0 && *(_piSelect) < _iNumCameras)
-		return 1;
-	else
-		return 0;
+	return select;
 }
