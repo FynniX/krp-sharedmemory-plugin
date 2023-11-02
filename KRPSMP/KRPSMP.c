@@ -25,6 +25,7 @@
 #include "RaceTrackPositionInfo.h"
 #include "RaceVehicleDataInfo.h"
 #include "CameraInfo.h"
+#include "CameraSet.h"
 #include "KRPSMP.h"
 
 char* GetModID() {
@@ -123,6 +124,8 @@ void Shutdown() {
 	deinitRaceTrackPositionInfo(logFile);
 	deinitRaceVehicleDataInfo(logFile);
 	deinitCameraInfo(logFile);
+
+	disconnectCameraSet(logFile);
 
 	if (logFile) fclose(logFile);
 }
@@ -434,24 +437,53 @@ void RaceVehicleData(void* _pData, int _iDataSize) {
 /* Return 1 if _piSelect is set, from 0 to _iNumVehicles - 1 */
 int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection, int* _piSelect)
 {
-	SPluginsSpectateVehicle_t* pasVehicleData;
+	CameraVehiclesInfo_t vehiclesInfo;
+	SPluginsSpectateVehicle_t data = *((SPluginsSpectateVehicle_t*)_pVehicleData);
 
-	pasVehicleData = (SPluginsSpectateVehicle_t*)_pVehicleData;
+	CameraSet_t* cameraSetData = getCameraSet(logFile);
+	if (cameraSetData != NULL && cameraSetData->cameraType == Vehicle && _iCurSelection != cameraSetData->selectedCamera)
+		_piSelect = &cameraSetData->selectedCamera;
 
-	return 0;
+	vehiclesInfo._iNumVehicles = _iNumVehicles;
+	vehiclesInfo._iCurSelection = _iCurSelection;
+	vehiclesInfo._piSelect = *(_piSelect);
+	vehiclesInfo.m_VehicleData = data;
+
+	cameraInfoView->m_VehiclesInfo = vehiclesInfo;
+	updateCameraInfo(logFile);
+
+	if (*(_piSelect) >= 0 && *(_piSelect) < _iNumVehicles)
+		return 1;
+	else
+		return 0;
 }
 
 /* Return 1 if _piSelect is set, from 0 to _iNumCameras - 1 */
 int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, int* _piSelect)
 {
-	char* pszCameraName;
-	int i;
+	CameraCamerasInfo_t camerasInfo;
+	char* pszCameraName = (char*)_pCameraData;
 
-	pszCameraName = (char*)_pCameraData;
-	for (i = 0; i < _iNumCameras; i++)
-	{
-		pszCameraName += strlen(pszCameraName) + 1;
+	CameraSet_t* cameraSetData = getCameraSet(logFile);
+	if (cameraSetData != NULL && cameraSetData->cameraType == Camera && _iCurSelection != cameraSetData->selectedCamera)
+		_piSelect = &cameraSetData->selectedCamera;
+
+	camerasInfo._iNumCameras = _iNumCameras;
+	camerasInfo._iCurSelection = _iCurSelection;
+	camerasInfo._piSelect = *(_piSelect);
+
+	for (int i = 0; i < 100; i++) {
+		if (i < _iNumCameras) {
+			size_t length = strlen(pszCameraName) + 1;
+			pszCameraName += length;
+			strcpy_s(camerasInfo.m_CameraNames[i], length, pszCameraName);
+		} else {
+			strcpy_s(camerasInfo.m_CameraNames[i], strlen("") + 1, "");
+		}
 	}
 
-	return 0;
+	if (*(_piSelect) >= 0 && *(_piSelect) < _iNumCameras)
+		return 1;
+	else
+		return 0;
 }
