@@ -398,7 +398,6 @@ void RaceClassification(void* _pData, int _iDataSize, void* _pArray, int _iElemS
 /* This function is optional */
 void RaceTrackPosition(int _iNumVehicles, void* _pArray, int _iElemSize) {
 	SPluginsRaceTrackPosition_t* pasRaceTrackPosition;
-
 	pasRaceTrackPosition = (SPluginsRaceTrackPosition_t*)_pArray;
 
 	raceTrackPositionInfoView->_iNumVehicles = _iNumVehicles;
@@ -438,7 +437,10 @@ void RaceVehicleData(void* _pData, int _iDataSize) {
 int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection, int* _piSelect)
 {
 	CameraVehiclesInfo_t vehiclesInfo;
-	SPluginsSpectateVehicle_t data = *((SPluginsSpectateVehicle_t*)_pVehicleData);
+	SPluginsSpectateVehicle_t* pasVehicleData;
+	pasVehicleData = (SPluginsSpectateVehicle_t*)_pVehicleData;
+
+	if (pasVehicleData->m_iRaceNum > 1000) return 0;
 
 	int select = 0;
 	CameraSet_t* cameraSetData = getCameraSet(logFile);
@@ -453,7 +455,16 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 
 	vehiclesInfo._iNumVehicles = _iNumVehicles;
 	vehiclesInfo._iCurSelection = _iCurSelection;
-	vehiclesInfo.m_VehicleData = data;
+
+	for (int i = 0; i < 100; i++) {
+		if (i < _iNumVehicles) {
+			vehiclesInfo.m_VehicleData[i] = *(pasVehicleData + i);
+		}
+		else {
+			SPluginsSpectateVehicle_t data = { 0 };
+			vehiclesInfo.m_VehicleData[i] = data;
+		}
+	}
 
 	cameraInfoView->m_VehiclesInfo = vehiclesInfo;
 	updateCameraInfo(logFile);

@@ -129,7 +129,7 @@ typedef struct {
 
 typedef struct {
 	int _iNumVehicles;
-	SPluginsSpectateVehicle_t m_VehicleData;
+	SPluginsSpectateVehicle_t m_VehicleData[100];
 	int _iCurSelection;
 } CameraVehiclesInfo_t;
 
