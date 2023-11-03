@@ -131,14 +131,12 @@ typedef struct {
 	int _iNumVehicles;
 	SPluginsSpectateVehicle_t m_VehicleData;
 	int _iCurSelection;
-	int _piSelect;
 } CameraVehiclesInfo_t;
 
 typedef struct {
 	int _iNumCameras;
 	char m_CameraNames[50][100];
 	int _iCurSelection;
-	int _piSelect;
 } CameraCamerasInfo_t;
 
 typedef struct {

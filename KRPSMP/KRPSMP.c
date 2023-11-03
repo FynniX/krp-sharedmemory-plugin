@@ -445,7 +445,7 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 	if (cameraSetData != NULL && cameraSetData->isControlled == 1) {
 		if (cameraSetData->selectedVehicle != _iCurSelection && cameraSetData->selectedVehicle >= 0 && cameraSetData->selectedVehicle < _iNumVehicles) {
 			select = 1;
-			_piSelect = &(cameraSetData->selectedVehicle);
+			*_piSelect = cameraSetData->selectedVehicle;
 		} else {
 			select = 0;
 		}
@@ -453,7 +453,6 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 
 	vehiclesInfo._iNumVehicles = _iNumVehicles;
 	vehiclesInfo._iCurSelection = _iCurSelection;
-	vehiclesInfo._piSelect = *(_piSelect);
 	vehiclesInfo.m_VehicleData = data;
 
 	cameraInfoView->m_VehiclesInfo = vehiclesInfo;
@@ -473,7 +472,7 @@ int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, in
 	if (cameraSetData != NULL && cameraSetData->isControlled == 1) {
 		if (cameraSetData->selectedCamera != _iCurSelection && cameraSetData->selectedCamera >= 0 && cameraSetData->selectedCamera < _iNumCameras) {
 			select = 1;
-			_piSelect = &(cameraSetData->selectedVehicle);
+			*_piSelect = cameraSetData->selectedVehicle;
 		}
 		else {
 			select = 0;
@@ -482,7 +481,6 @@ int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, in
 
 	camerasInfo._iNumCameras = _iNumCameras;
 	camerasInfo._iCurSelection = _iCurSelection;
-	camerasInfo._piSelect = *(_piSelect);
 
 	for (int i = 0; i < 50; i++) {
 		if (i < _iNumCameras) {
@@ -493,6 +491,9 @@ int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, in
 			strcpy_s(camerasInfo.m_CameraNames[i], strlen("") + 1, "");
 		}
 	}
+
+	cameraInfoView->m_CamerasInfo = camerasInfo;
+	updateCameraInfo(logFile);
 
 	return select;
 }
