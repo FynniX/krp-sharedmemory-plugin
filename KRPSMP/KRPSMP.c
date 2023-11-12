@@ -195,6 +195,19 @@ void RunTelemetry(void* _pData, int _iDataSize, float _fTime, float _fPos) {
 }
 
 /*
+_iState: 0 = on track; 1 = spectate; 2 = replay.
+Set _piNumQuads to the number of quads to draw.
+Set _ppQuad to an array of SPluginQuad_t structures.
+Set _piNumString to the number of strings to draw.
+Set _ppString to an array of SPluginString_t structures.
+This function is optional
+*/
+void Draw(int _iState, int* _piNumQuads, void** _ppQuad, int* _piNumString, void** _ppString) {
+	pluginInfoView->m_iState2 = _iState;
+	updatePluginInfo(logFile);
+}
+
+/*
 _pfRaceData is a pointer to a float array with the longitudinal position of the start / finish line, splits and speedtrap.
 This function is optional
 */
@@ -439,8 +452,6 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 	CameraVehiclesInfo_t vehiclesInfo;
 	SPluginsSpectateVehicle_t* pasVehicleData;
 	pasVehicleData = (SPluginsSpectateVehicle_t*)_pVehicleData;
-
-	if (pasVehicleData->m_iRaceNum > 1000) return 0;
 
 	int select = 0;
 	CameraSet_t* cameraSetData = getCameraSet(logFile);

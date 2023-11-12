@@ -7,6 +7,8 @@ typedef struct {
 	int m_id;
 	//0: software running; 1: on-track, simulation paused; 2: on-track, simulation running
 	int m_iState;
+	//_iState: 0 = on track; 1 = spectate; 2 = replay.
+	int m_iState2;
 	//0 = 100hz; 1 = 50hz; 2 = 20hz; 3 = 10hz; -1 = disable
 	int m_PluginRate;
 	int m_PluginVersion;
