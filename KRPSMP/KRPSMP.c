@@ -203,6 +203,8 @@ Set _ppString to an array of SPluginString_t structures.
 This function is optional
 */
 void Draw(int _iState, int* _piNumQuads, void** _ppQuad, int* _piNumString, void** _ppString) {
+	*(_piNumQuads) = 0;
+	*(_piNumString) = 0;
 	pluginInfoView->m_iState2 = _iState;
 	updatePluginInfo(logFile);
 }
@@ -486,6 +488,7 @@ int SpectateVehicles(int _iNumVehicles, void* _pVehicleData, int _iCurSelection,
 /* Return 1 if _piSelect is set, from 0 to _iNumCameras - 1 */
 int SpectateCameras(int _iNumCameras, void* _pCameraData, int _iCurSelection, int* _piSelect)
 {
+	return 0;
 	CameraCamerasInfo_t camerasInfo;
 	char* pszCameraName = (char*)_pCameraData;
 
