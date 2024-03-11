@@ -195,6 +195,21 @@ void RunTelemetry(void* _pData, int _iDataSize, float _fTime, float _fPos) {
 }
 
 /*
+called when software is started.
+Set _piNumSprites to the number of zero-separated filenames in _pszSpriteName.
+Set _piNumFonts to the number of zero-separated filenames in _pszFontName.
+The base path for the sprite and font files is the plugins folder.
+This function is optional
+*/
+int DrawInit(int* _piNumSprites, char** _pszSpriteName, int* _piNumFonts, char** _pszFontName)
+{
+	/*
+	return 0 if pointers are set
+	*/
+	return -1;
+}
+
+/*
 _iState: 0 = on track; 1 = spectate; 2 = replay.
 Set _piNumQuads to the number of quads to draw.
 Set _ppQuad to an array of SPluginQuad_t structures.
@@ -203,8 +218,8 @@ Set _ppString to an array of SPluginString_t structures.
 This function is optional
 */
 void Draw(int _iState, int* _piNumQuads, void** _ppQuad, int* _piNumString, void** _ppString) {
-	*(_piNumQuads) = 0;
-	*(_piNumString) = 0;
+	*_piNumQuads = 0;
+	*_piNumString = 0;
 	pluginInfoView->m_iState2 = _iState;
 	updatePluginInfo(logFile);
 }

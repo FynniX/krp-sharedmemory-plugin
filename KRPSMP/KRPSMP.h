@@ -23,6 +23,7 @@ KRPSMP_API void RunLap(void* _pData, int _iDataSize);
 KRPSMP_API void RunSplit(void* _pData, int _iDataSize);
 KRPSMP_API void RunTelemetry(void* _pData, int _iDataSize, float _fTime, float _fPos);
 
+KRPSMP_API int DrawInit(int* _piNumSprites, char** _pszSpriteName, int* _piNumFonts, char** _pszFontName);
 KRPSMP_API void Draw(int _iState, int* _piNumQuads, void** _ppQuad, int* _piNumString, void** _ppString);
 
 KRPSMP_API void TrackCenterline(int _iNumSegments, SPluginsTrackSegment_t* _pasSegment, float* _pfRaceData);
