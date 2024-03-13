@@ -6,15 +6,22 @@
 
 ## Requirements
 
-- None
+- Windows
 
 ## Installing
 
-1. Place **KRPSMP.dlo** into plugins folder inside [Kart Racing Pro](https://www.kartracing-pro.com/) installation folder.
-2. Place **krpsmp.ini** inside [Kart Racing Pro](https://www.kartracing-pro.com/) installation folder.
+1. Place **krp-sharedmemory-plugin.dlo** into plugins folder inside [Kart Racing Pro](https://www.kartracing-pro.com/) installation folder.
 
 ## Developing
 
+- Setup environment:
+    ```sh
+    cmake .
+    ```
+- Build with 
+    ```sh
+    cmake --build .
+    ```
 - Change path inside **install.bat** to make it working with your environment.
 
 ## License
