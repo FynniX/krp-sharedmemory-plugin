@@ -37,7 +37,7 @@ typedef enum
 
 #define MB_KARTEVENTINFO_FILE_NAME "Local\\KRPSMP__KartEventInfo"
 #define MB_KARTSESSIONINFO_FILE_NAME "Local\\KRPSMP__KartSessionInfo"
-#define MB_KARTDATAINFO_FILE_NAME "Local\\KRPSMP__KartDataInfo"
+#define MB_KARTTELEMETRYINFO_FILE_NAME "Local\\KRPSMP__KartTelemetryInfo"
 #define MB_KARTLAPSINFO_FILE_NAME "Local\\KRPSMP__KartLapsInfo"
 #define MB_KARTSPLITSINFO_FILE_NAME "Local\\KRPSMP__KartSplitsInfo"
 

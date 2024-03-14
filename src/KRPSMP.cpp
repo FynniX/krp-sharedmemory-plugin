@@ -30,10 +30,10 @@ extern "C" KRPSMP_API int Startup(char *_szSavePath)
     KartSessionInfoView = KartSessionInfo->view();
     logger->Log("KartSessionInfo created");
 
-    KartTelemetryInfo = new MappedBuffer<KartTelemetryInfo_t>(MB_KARTDATAINFO_FILE_NAME);
+    KartTelemetryInfo = new MappedBuffer<KartTelemetryInfo_t>(MB_KARTTELEMETRYINFO_FILE_NAME);
     KartTelemetryInfo->create();
     KartTelemetryInfoView = KartTelemetryInfo->view();
-    logger->Log("KartDataInfo created");
+    logger->Log("KartTelemetryInfo created");
 
     KartLapsInfo = new MappedBuffer<KartLapsInfo_t>(MB_KARTLAPSINFO_FILE_NAME);
     KartLapsInfo->create();
@@ -316,7 +316,7 @@ extern "C" KRPSMP_API void RunTelemetry(void *_pData, int _iDataSize, float _fTi
     KartTelemetryInfoView->_fPos = _fPos;
     KartTelemetryInfoView->m_KartData = *(SPluginsKartData_t *)_pData;
     KartTelemetryInfo->write();
-    logger->Log("KartDataInfo updated");
+    logger->Log("KartTelemetryInfo updated");
 }
 
 /******************************************************************************
