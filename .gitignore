@@ -9,12 +9,4 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
-
-*.vcxproj
-*.vcxproj.*
-*.sln
-CMakeFiles/
-Debug/
-*.dir/
-x64/
-x32/
+build/
