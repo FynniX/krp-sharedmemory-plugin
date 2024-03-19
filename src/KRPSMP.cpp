@@ -216,9 +216,9 @@ extern "C" KRPSMP_API void EventDeinit()
     logger->Log("KartSplitsInfo updated");
 
     TrackSegmentsInfoView->_iNumSegments = 0;
-    SPluginsTrackSegment_t data3 = {0};
+    SPluginsTrackSegment_t data4 = {0};
     for (int i = 0; i < SEGMENTS_AMOUNT; i++)
-        TrackSegmentsInfoView->m_TrackSegments[i] = data3;
+        TrackSegmentsInfoView->m_TrackSegments[i] = data4;
     for (int i = 0; i < TRACK_POINTS; i++)
         TrackSegmentsInfoView->m_RaceData[i] = 0.0f;
     TrackSegmentsInfo->write();
