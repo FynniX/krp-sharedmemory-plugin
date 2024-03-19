@@ -1,1 +1,1 @@
-copy "C:\Users\Fynn Haupt\CodeProjects\krp-sharedmemory-plugin\Debug\krp-sharedmemory-plugin.dll" "G:\SteamLibrary\steamapps\common\Kart Racing Pro\plugins\krp-sharedmemory-plugin.dlo"
+copy "C:\Users\Fynn Haupt\CodeProjects\krp-sharedmemory-plugin\build\Release\krp-sharedmemory-plugin.dll" "G:\SteamLibrary\steamapps\common\Kart Racing Pro\plugins\krp-sharedmemory-plugin.dlo"
