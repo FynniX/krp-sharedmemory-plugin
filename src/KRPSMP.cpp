@@ -632,8 +632,10 @@ extern "C" KRPSMP_API int SpectateCameras(int _iNumCameras, void *_pCameraData, 
     if (CamerasInfoView->_iNumCameras > CAMERAS_AMOUNT)
         CamerasInfoView->_iNumCameras = CAMERAS_AMOUNT;
 
-    for (int i = 0; i < CamerasInfoView->_iNumCameras; i++)
-        strcpy_s(CamerasInfoView->m_CameraNames[i], STRING_LENGTH, (array + i * STRING_LENGTH));
+    for (int i = 0; i < CamerasInfoView->_iNumCameras; i++) {
+        strcpy_s(CamerasInfoView->m_CameraNames[i], STRING_LENGTH, array);
+        array += strlen(array) + 1;
+    }
 
     CamerasInfoView->currentCamera = _iCurSelection;
 
