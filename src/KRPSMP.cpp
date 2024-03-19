@@ -214,6 +214,15 @@ extern "C" KRPSMP_API void EventDeinit()
 
     KartSplitsInfo->write();
     logger->Log("KartSplitsInfo updated");
+
+    TrackSegmentsInfoView->_iNumSegments = 0;
+    SPluginsTrackSegment_t data3 = {0};
+    for (int i = 0; i < SEGMENTS_AMOUNT; i++)
+        TrackSegmentsInfoView->m_TrackSegments[i] = data3;
+    for (int i = 0; i < TRACK_POINTS; i++)
+        TrackSegmentsInfoView->m_RaceData[i] = 0.0f;
+    TrackSegmentsInfo->write();
+    logger->Log("TrackSegmentsInfo updated");
 }
 
 /* called when kart goes to track. */
@@ -243,15 +252,6 @@ extern "C" KRPSMP_API void RunDeinit()
     KartTelemetryInfoView->m_KartData = data2;
     KartTelemetryInfo->write();
     logger->Log("KartTelemetryInfo updated");
-
-    TrackSegmentsInfoView->_iNumSegments = 0;
-    SPluginsTrackSegment_t data3 = {0};
-    for (int i = 0; i < SEGMENTS_AMOUNT; i++)
-        TrackSegmentsInfoView->m_TrackSegments[i] = data3;
-    for (int i = 0; i < TRACK_POINTS; i++)
-        TrackSegmentsInfoView->m_RaceData[i] = 0.0f;
-    TrackSegmentsInfo->write();
-    logger->Log("TrackSegmentsInfo updated");
 }
 
 /* called when simulation is started / resumed. */
