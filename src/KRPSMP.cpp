@@ -404,11 +404,26 @@ extern "C" KRPSMP_API void RaceDeinit()
 
 extern "C" KRPSMP_API void RaceAddEntry(void *_pData, int _iDataSize)
 {
+    SPluginsRaceAddEntry_t data = *(SPluginsRaceAddEntry_t *)_pData;
+
+    int entryIndex = -1;
+    for (int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++)
+    {
+        if (RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
+            continue;
+        entryIndex = i;
+        break;
+    }
+
+    // RaceNum already exists
+    if (entryIndex != -1)
+        return;
+
     RaceEntriesInfoView->_iNumEntries++;
     if (RaceEntriesInfoView->_iNumEntries > ENTRIES_AMOUNT)
         RaceEntriesInfoView->_iNumEntries = ENTRIES_AMOUNT;
 
-    RaceEntriesInfoView->m_RaceEntries[RaceEntriesInfoView->_iNumEntries - 1] = *(SPluginsRaceAddEntry_t *)_pData;
+    RaceEntriesInfoView->m_RaceEntries[RaceEntriesInfoView->_iNumEntries - 1] = data;
     RaceEntriesInfo->write();
     logger->Log("RaceEntriesInfo updated");
 }
