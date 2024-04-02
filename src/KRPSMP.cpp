@@ -228,6 +228,11 @@ extern "C" KRPSMP_API void EventDeinit()
 /* called when kart goes to track. */
 extern "C" KRPSMP_API void RunInit(void *_pData, int _iDataSize)
 {
+    // Set plugin info values
+    PluginInfoView->m_GameState = GameState_t::RUNNING;
+    PluginInfo->write();
+    logger->Log("PluginInfo updated");
+
     KartSessionInfoView->m_KartSession = *(SPluginsKartSession_t *)_pData;
     KartSessionInfo->write();
     logger->Log("KartSessionInfo updated");
@@ -307,11 +312,6 @@ extern "C" KRPSMP_API void RunSplit(void *_pData, int _iDataSize)
 /* _fTime is the ontrack time, in seconds. _fPos is the position on centerline, from 0 to 1. */
 extern "C" KRPSMP_API void RunTelemetry(void *_pData, int _iDataSize, float _fTime, float _fPos)
 {
-    // Set plugin info values
-    PluginInfoView->m_GameState = GameState_t::RUNNING;
-    PluginInfo->write();
-    logger->Log("PluginInfo updated");
-
     KartTelemetryInfoView->_fTime = _fTime;
     KartTelemetryInfoView->_fPos = _fPos;
     KartTelemetryInfoView->m_KartData = *(SPluginsKartData_t *)_pData;
@@ -349,9 +349,12 @@ extern "C" KRPSMP_API void Draw(int _iState, int *_piNumQuads, void **_ppQuad, i
     *_piNumString = 0;
 
     // Set plugin info values
-    PluginInfoView->m_TrackState = (TrackState_t)_iState;
-    PluginInfo->write();
-    logger->Log("PluginInfo updated");
+    if (_iState != PluginInfoView->m_TrackState)
+    {
+        PluginInfoView->m_TrackState = (TrackState_t)_iState;
+        PluginInfo->write();
+        logger->Log("PluginInfo updated");
+    }
 }
 
 /******************************************************************************
@@ -411,23 +414,26 @@ extern "C" KRPSMP_API void RaceRemoveEntry(void *_pData, int _iDataSize)
     SPluginsRaceRemoveEntry_t data = *(SPluginsRaceRemoveEntry_t *)_pData;
 
     int entryIndex = -1;
-    for(int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++) {
-        if(RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
+    for (int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++)
+    {
+        if (RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
             continue;
         entryIndex = i;
         break;
     }
 
     // Not found
-    if(entryIndex == -1)
+    if (entryIndex == -1)
         return;
-        
+
     RaceEntriesInfoView->_iNumEntries--;
     if (RaceEntriesInfoView->_iNumEntries < 0)
         RaceEntriesInfoView->_iNumEntries = 0;
 
-    for(int i = entryIndex; i < RaceEntriesInfoView->_iNumEntries; i++) {
-        if(i + 1 == RaceEntriesInfoView->_iNumEntries) {
+    for (int i = entryIndex; i < RaceEntriesInfoView->_iNumEntries; i++)
+    {
+        if (i + 1 == RaceEntriesInfoView->_iNumEntries)
+        {
             SPluginsRaceAddEntry_t data = {0};
             RaceEntriesInfoView->m_RaceEntries[i] = data;
             break;
@@ -451,9 +457,9 @@ extern "C" KRPSMP_API void RaceSessionState(void *_pData, int _iDataSize)
 {
     SPluginsRaceSessionState_t data = *(SPluginsRaceSessionState_t *)_pData;
     RaceSessionInfoView->m_RaceSession.m_iSession = data.m_iSession;
-	RaceSessionInfoView->m_RaceSession.m_iSessionSeries = data.m_iSessionSeries;
-	RaceSessionInfoView->m_RaceSession.m_iSessionState = data.m_iSessionState;
-	RaceSessionInfoView->m_RaceSession.m_iSessionLength = data.m_iSessionLength;
+    RaceSessionInfoView->m_RaceSession.m_iSessionSeries = data.m_iSessionSeries;
+    RaceSessionInfoView->m_RaceSession.m_iSessionState = data.m_iSessionState;
+    RaceSessionInfoView->m_RaceSession.m_iSessionLength = data.m_iSessionLength;
     RaceSessionInfo->write();
     logger->Log("RaceSessionInfo updated");
 }
@@ -497,15 +503,16 @@ extern "C" KRPSMP_API void RaceSpeed(void *_pData, int _iDataSize)
     SPluginsRaceSpeed_t data = *(SPluginsRaceSpeed_t *)_pData;
 
     int entryIndex = -1;
-    for(int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++) {
-        if(RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
+    for (int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++)
+    {
+        if (RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
             continue;
         entryIndex = i;
         break;
     }
 
     // Not found
-    if(entryIndex == -1)
+    if (entryIndex == -1)
         return;
 
     RaceSpeedsInfoView->m_RaceSpeeds[entryIndex] = data;
@@ -534,19 +541,21 @@ extern "C" KRPSMP_API void RaceCommunication(void *_pData, int _iDataSize)
 extern "C" KRPSMP_API void RaceClassification(void *_pData, int _iDataSize, void *_pArray, int _iElemSize)
 {
     SPluginsRaceClassification_t data = *(SPluginsRaceClassification_t *)_pData;
-    SPluginsRaceClassificationEntry_t* array = (SPluginsRaceClassificationEntry_t*)_pArray; 
+    SPluginsRaceClassificationEntry_t *array = (SPluginsRaceClassificationEntry_t *)_pArray;
 
     RaceClassificationInfoView->m_RaceClassification = data;
 
-    for(int i = 0; i < data.m_iNumEntries; i++) {
+    for (int i = 0; i < data.m_iNumEntries; i++)
+    {
         int oldGap = RaceClassificationInfoView->m_RaceClassificationEntries[i].m_iGap;
         int oldGapLaps = RaceClassificationInfoView->m_RaceClassificationEntries[i].m_iGapLaps;
         SPluginsRaceClassificationEntry_t entry = *(array + i);
 
-        if ((oldGap > 0 && entry.m_iGap == 0) || (oldGapLaps > 0 && entry.m_iGapLaps == 0)) {
-			entry.m_iGap = oldGap;
-			entry.m_iGapLaps = oldGapLaps;
-		}
+        if ((oldGap > 0 && entry.m_iGap == 0) || (oldGapLaps > 0 && entry.m_iGapLaps == 0))
+        {
+            entry.m_iGap = oldGap;
+            entry.m_iGapLaps = oldGapLaps;
+        }
 
         RaceClassificationInfoView->m_RaceClassificationEntries[i] = entry;
     }
@@ -557,7 +566,7 @@ extern "C" KRPSMP_API void RaceClassification(void *_pData, int _iDataSize, void
 
 extern "C" KRPSMP_API void RaceTrackPosition(int _iNumVehicles, void *_pArray, int _iElemSize)
 {
-    SPluginsRaceTrackPosition_t* array = (SPluginsRaceTrackPosition_t *)_pArray;
+    SPluginsRaceTrackPosition_t *array = (SPluginsRaceTrackPosition_t *)_pArray;
 
     RaceTrackPositionsInfoView->_iNumVehicles = _iNumVehicles;
     if (RaceTrackPositionsInfoView->_iNumVehicles > ENTRIES_AMOUNT)
@@ -575,15 +584,16 @@ extern "C" KRPSMP_API void RaceVehicleData(void *_pData, int _iDataSize)
     SPluginsRaceVehicleData_t data = *(SPluginsRaceVehicleData_t *)_pData;
 
     int entryIndex = -1;
-    for(int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++) {
-        if(RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
+    for (int i = 0; i < RaceEntriesInfoView->_iNumEntries; i++)
+    {
+        if (RaceEntriesInfoView->m_RaceEntries[i].m_iRaceNum != data.m_iRaceNum)
             continue;
         entryIndex = i;
         break;
     }
 
     // Not found
-    if(entryIndex == -1)
+    if (entryIndex == -1)
         return;
 
     RaceVehiclesDataInfoView->m_RaceVehiclesData[entryIndex] = data;
@@ -599,7 +609,7 @@ functions to control the replay
 extern "C" KRPSMP_API int SpectateVehicles(int _iNumVehicles, void *_pVehicleData, int _iCurSelection, int *_piSelect)
 {
     // Update CamerasInfo
-    SPluginsSpectateVehicle_t* array = (SPluginsSpectateVehicle_t*)_pVehicleData;
+    SPluginsSpectateVehicle_t *array = (SPluginsSpectateVehicle_t *)_pVehicleData;
 
     CamerasInfoView->_iNumVehicles = _iNumVehicles;
     if (CamerasInfoView->_iNumVehicles > ENTRIES_AMOUNT)
@@ -611,7 +621,8 @@ extern "C" KRPSMP_API int SpectateVehicles(int _iNumVehicles, void *_pVehicleDat
     CamerasInfoView->currentVehicle = _iCurSelection;
 
     // Read CamerasControlInfo
-    if(CamerasControlInfoView->selectedVehicle != _iCurSelection) {
+    if (CamerasControlInfoView->selectedVehicle != _iCurSelection)
+    {
         *_piSelect = CamerasControlInfoView->selectedVehicle;
         CamerasInfoView->currentVehicle = CamerasControlInfoView->selectedVehicle;
     }
@@ -626,13 +637,14 @@ extern "C" KRPSMP_API int SpectateVehicles(int _iNumVehicles, void *_pVehicleDat
 extern "C" KRPSMP_API int SpectateCameras(int _iNumCameras, void *_pCameraData, int _iCurSelection, int *_piSelect)
 {
     // Update CamerasInfo
-    char* array = (char*)_pCameraData;
+    char *array = (char *)_pCameraData;
 
     CamerasInfoView->_iNumCameras = _iNumCameras;
     if (CamerasInfoView->_iNumCameras > CAMERAS_AMOUNT)
         CamerasInfoView->_iNumCameras = CAMERAS_AMOUNT;
 
-    for (int i = 0; i < CamerasInfoView->_iNumCameras; i++) {
+    for (int i = 0; i < CamerasInfoView->_iNumCameras; i++)
+    {
         strcpy_s(CamerasInfoView->m_CameraNames[i], STRING_LENGTH, array);
         array += strlen(array) + 1;
     }
@@ -640,7 +652,8 @@ extern "C" KRPSMP_API int SpectateCameras(int _iNumCameras, void *_pCameraData, 
     CamerasInfoView->currentCamera = _iCurSelection;
 
     // Read CamerasControlInfo
-    if(CamerasControlInfoView->selectedCamera != _iCurSelection) {
+    if (CamerasControlInfoView->selectedCamera != _iCurSelection)
+    {
         *_piSelect = CamerasControlInfoView->selectedCamera;
         CamerasInfoView->currentCamera = CamerasControlInfoView->selectedCamera;
     }
