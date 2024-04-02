@@ -262,6 +262,10 @@ extern "C" KRPSMP_API void RunDeinit()
 /* called when simulation is started / resumed. */
 extern "C" KRPSMP_API void RunStart()
 {
+    // Set plugin info values
+    PluginInfoView->m_GameState = GameState_t::RUNNING;
+    PluginInfo->write();
+    logger->Log("PluginInfo updated");
 }
 
 /* called when simulation is paused. */

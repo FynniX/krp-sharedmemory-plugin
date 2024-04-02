@@ -10,7 +10,7 @@
 
 #define KRPSMP_API __declspec(dllexport)
 
-#define KRPSMP_VERSION 14
+#define KRPSMP_VERSION 15
 
 Configuration *configuration;
 Logger *logger;
